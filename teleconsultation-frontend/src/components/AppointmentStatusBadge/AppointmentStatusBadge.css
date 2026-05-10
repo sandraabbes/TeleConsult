@@ -1,0 +1,42 @@
+/* Matches spec: CONFIRMED indigo, CANCELLED gray, COMPLETED green, NOSHOW red, PENDING amber */
+.appt-status-badge-unified {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.appt-status-badge-unified--confirmed {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.appt-status-badge-unified--cancelled {
+  background: #9ca3af;
+  color: #ffffff;
+}
+
+.appt-status-badge-unified--completed {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.appt-status-badge-unified--noshow {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.appt-status-badge-unified--pending {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+.appt-status-badge-unified--reschedule_requested {
+  background: #F97316;
+  color: #ffffff;
+}

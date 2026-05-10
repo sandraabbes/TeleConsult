@@ -1,0 +1,269 @@
+.appointments-page {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100%;
+  font-family: 'Manrope', sans-serif;
+}
+
+.appointments-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appointments-right {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appointments-tabs {
+  display: flex;
+  gap: 0;
+  justify-content: flex-start;
+  border-bottom: 2px solid #F3F4F6;
+}
+
+.appointments-tab {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.appointments-tab.active {
+  color: #1479FF;
+  border-bottom-color: #1479FF;
+}
+
+.appointments-tab:hover:not(.active) {
+  color: #374151;
+}
+
+.upcoming-next-card {
+  background: #EFF6FF;
+  border: 1.5px solid #BFDBFE;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.upcoming-next-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1479FF;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.upcoming-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EF4444;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.upcoming-next-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.upcoming-patient-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.patient-avatar-lg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FDE8D8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #C2571A;
+  flex-shrink: 0;
+}
+
+.date-group-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px 0;
+}
+
+.appointments-list-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+  overflow: hidden;
+}
+
+.appointment-list-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  transition: background 0.15s;
+  justify-content: space-between;
+}
+
+.appointment-list-row:hover {
+  background: #FAFAFA;
+}
+
+.patient-avatar-sm {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #FDE8D8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #C2571A;
+  flex-shrink: 0;
+}
+
+.appt-patient-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 2px 0;
+}
+
+.appt-patient-sub {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+}
+
+.appt-detail-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 80px;
+}
+
+.appt-detail-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #1479FF;
+  letter-spacing: 0.05em;
+}
+
+.appt-detail-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.right-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+  padding: 16px 20px;
+}
+
+.right-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.08em;
+  margin: 0 0 14px 0;
+}
+
+.overview-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.overview-label {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.overview-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9CA3AF;
+  padding: 4px 0;
+}
+
+.cal-day {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  padding: 5px 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cal-day:hover:not(.cal-empty) {
+  background: #EFF6FF;
+  color: #1479FF;
+}
+
+.cal-empty { visibility: hidden; cursor: default; }
+
+.cal-today {
+  background: #1479FF;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.cal-selected {
+  background: #1479FF;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.cal-has-appt {
+  background: #EFF6FF;
+  color: #1479FF;
+  font-weight: 600;
+}

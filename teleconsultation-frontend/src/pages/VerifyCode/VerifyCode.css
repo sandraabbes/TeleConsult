@@ -1,0 +1,76 @@
+.verify-form-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vc-icon-circle {
+  width: 64px;
+  height: 64px;
+  background: #EFF6FF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.verify-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1479FF;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.verify-subtitle {
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.otp-inputs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.otp-input-box {
+  width: 52px;
+  height: 56px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  font-family: 'Manrope', sans-serif;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.otp-input-box:focus {
+  border-color: #1479FF;
+  box-shadow: 0 0 0 3px rgba(20, 121, 255, 0.12);
+}
+
+.vc-timer {
+  text-align: center;
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 32px;
+}
+
+.vc-resend {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 14px;
+}
+
+.resend-btn:hover:not(:disabled) {
+  text-decoration: underline;
+}

@@ -1,0 +1,17 @@
+.patient-detail-page {
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100%;
+  font-family: 'Manrope', sans-serif;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-bottom: 8px;
+}

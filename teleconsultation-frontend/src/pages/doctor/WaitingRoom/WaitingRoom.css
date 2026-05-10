@@ -1,0 +1,241 @@
+.doctor-wr {
+  max-width: 560px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+.doctor-wr-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  padding: 36px 32px;
+  text-align: center;
+}
+
+.doctor-wr-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+}
+
+.doctor-wr-subtitle {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0 0 28px 0;
+}
+
+/* Status indicator */
+.wr-status-box {
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.wr-status-box.waiting {
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+}
+
+.wr-status-box.ready {
+  background: #DCFCE7;
+  border: 1px solid #BBF7D0;
+}
+
+.wr-status-box.in-progress {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+}
+
+.wr-status-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wr-status-icon.waiting {
+  background: #FDE68A;
+  color: #D97706;
+}
+
+.wr-status-icon.ready {
+  background: #BBF7D0;
+  color: #16A34A;
+}
+
+.wr-status-icon.in-progress {
+  background: #BFDBFE;
+  color: #1479FF;
+}
+
+.wr-status-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+}
+
+.wr-status-desc {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Presence indicator */
+.wr-presence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wr-presence.absent {
+  background: #F8FAFC;
+  color: #94A3B8;
+  border: 1px dashed #E2E8F0;
+}
+
+.wr-presence.present {
+  background: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.wr-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16A34A;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.wr-pulse-dot.absent {
+  background: #CBD5E1;
+  animation: none;
+}
+
+/* Start button */
+.wr-start-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.wr-start-btn.enabled {
+  background: #22C55E;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+.wr-start-btn.enabled:hover {
+  background: #16A34A;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.wr-start-btn.disabled {
+  background: #F1F5F9;
+  color: #94A3B8;
+  cursor: not-allowed;
+}
+
+/* Appointment details */
+.wr-details {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.wr-details-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+.wr-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.wr-detail-item {
+  background: #F8FAFC;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.wr-detail-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wr-detail-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-top: 2px;
+}
+
+.wr-back-btn {
+  margin-top: 16px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.wr-back-btn:hover {
+  background: #F1F5F9;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wr-spinner {
+  animation: spin-slow 2s linear infinite;
+  display: inline-block;
+}

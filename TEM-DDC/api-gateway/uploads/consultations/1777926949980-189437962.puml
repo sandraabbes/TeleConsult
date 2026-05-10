@@ -1,0 +1,103 @@
+@startuml appointment_booking
+
+' ── Styling ──────────────────────────────────────────────
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Manrope
+skinparam defaultFontSize 13
+
+skinparam actor {
+    BorderColor #1479FF
+    FontColor   #111827
+    FontStyle   bold
+}
+
+skinparam participant {
+    BackgroundColor #EFF6FF
+    BorderColor     #1479FF
+    FontColor       #111827
+    FontStyle       bold
+}
+
+skinparam sequence {
+    ArrowColor              #1479FF
+    ArrowThickness          1.5
+    LifeLineBorderColor     #93C5FD
+    LifeLineBackgroundColor #DBEAFE
+    DividerBackgroundColor  #F1F5F9
+    DividerBorderColor      #CBD5E1
+    DividerFontColor        #1E3A5F
+    DividerFontStyle        bold
+    DividerFontSize         13
+    GroupBorderColor        #94A3B8
+    GroupBackgroundColor    #F8FAFC
+    GroupFontColor          #374151
+    GroupFontStyle          italic
+    NoteBackgroundColor     #FFF7ED
+    NoteBorderColor         #F59E0B
+    NoteFontColor           #92400E
+}
+
+skinparam roundcorner 10
+
+' ── Participants (left to right order) ───────────────────
+actor       "Patient"               as Patient
+participant "API Gateway"           as Gateway
+participant "Appointments Service"  as RV
+participant "Payments Service"      as Pay
+participant "Notifications Service" as Notif
+actor       "Doctor"                as Doctor
+
+' ── Auth reference ───────────────────────────────────────
+ref over Patient, Doctor
+    Authenticate
+end ref
+
+' ═════════════════════════════════════════════════════════
+== Booking Request ==
+' ═════════════════════════════════════════════════════════
+
+Patient ->  Gateway : Select doctor, date & time
+Gateway ->  RV      : Create appointment
+RV      ->  RV      : Status → Pending
+RV      ->  Notif   : New booking notification
+Notif   ->  Doctor  : "You have a new appointment request"
+Gateway --> Patient : "Waiting for doctor's approval"
+
+' ═════════════════════════════════════════════════════════
+== Doctor Approval ==
+' ═════════════════════════════════════════════════════════
+
+Doctor  ->  Gateway : Review & accept request
+Gateway ->  RV      : Confirm appointment
+RV      ->  RV      : Status → Scheduled
+RV      ->  Notif   : Acceptance notification
+Notif   ->  Patient : "Appointment accepted – please pay"
+Gateway --> Doctor  : Appointment confirmed
+
+' ═════════════════════════════════════════════════════════
+== Payment ==
+' ═════════════════════════════════════════════════════════
+
+Patient ->  Gateway : Initiate payment
+Gateway ->  Pay     : Create payment order
+Pay     --> Gateway : Payment page link
+Gateway --> Patient : Redirect to payment page (Konnect)
+Patient ->  Pay     : Submit payment
+Pay     ->  Pay     : Process payment
+
+alt Payment successful
+    Pay     ->  Gateway : Payment confirmed callback
+    Gateway ->  RV      : Mark appointment as paid
+    RV      ->  RV      : Status → Confirmed
+    RV      ->  Notif   : Payment success notification
+    Notif   ->  Patient : "Payment successful – you're all set"
+    Notif   ->  Doctor  : "Appointment payment received"
+    Gateway --> Patient : Show confirmation screen
+else Payment failed
+    Pay     ->  Gateway : Payment failed callback
+    Gateway ->  RV      : Mark appointment as unpaid
+    RV      ->  RV      : Status → Cancelled
+    Gateway --> Patient : "Payment failed – please try again"
+end
+
+@enduml

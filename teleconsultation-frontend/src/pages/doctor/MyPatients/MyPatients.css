@@ -1,0 +1,45 @@
+.patients-page {
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100%;
+  font-family: 'Manrope', sans-serif;
+}
+
+.patients-table-header {
+  display: grid;
+  grid-template-columns: 100px 1fr 160px 180px 80px;
+  padding: 12px 20px;
+  background: #F9FAFB;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.05em;
+}
+
+.patients-table-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 160px 180px 80px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #F3F4F6;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.patients-table-row:last-child {
+  border-bottom: none;
+}
+
+.patients-table-row:hover {
+  background: #FAFAFA;
+}
+
+.patients-col-id { }
+.patients-col-name { }
+.patients-col-contact { }
+.patients-col-visit { }
+.patients-col-actions {
+  display: flex;
+  justify-content: flex-end;
+}

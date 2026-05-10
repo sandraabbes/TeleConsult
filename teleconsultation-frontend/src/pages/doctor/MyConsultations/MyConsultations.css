@@ -1,0 +1,234 @@
+.history-page {
+  gap: 24px;
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100%;
+  font-family: 'Manrope', sans-serif;
+}
+
+/*.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}*/
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Filters */
+.filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.filter-select .ant-select-selector {
+  background: white !important;
+  border-radius: 8px !important;
+  border: 1px solid #E2E8F0 !important;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #334155;
+  height: 38px !important;
+  display: flex;
+  align-items: center;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  padding: 3px;
+}
+
+.view-toggle .ant-btn {
+  border: none;
+  color: #94A3B8;
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+}
+
+.view-toggle .active-view {
+  background: #EFF6FF;
+  color: #1479FF;
+}
+
+/* History Card */
+.history-card {
+  background: white;
+  border-radius: 16px;
+  padding: 15px 24px;
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+  align-items: center;
+  border: 1px solid #F1F5F9;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.history-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.patient-info-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.label-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #1479FF;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
+  display: block;
+}
+
+.patient-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+}
+
+.patient-id {
+  font-size: 12px;
+  color: #94A3B8;
+  margin: 0;
+  font-weight: 500;
+}
+
+.appt-info-section {
+  padding-left: 16px;
+}
+
+.appt-type {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+}
+
+.appt-date {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Status pills */
+.status-section {
+  padding-left: 16px;
+}
+
+/* Actions */
+.actions-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.summary-btn {
+  border-radius: 8px !important;
+  color: #1479FF !important;
+  border-color: #DBEAFE !important;
+  font-weight: 600 !important;
+  background: #EFF6FF !important;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.summary-btn:hover:not(:disabled) {
+  background: #DBEAFE !important;
+  border-color: #93C5FD !important;
+}
+
+.summary-btn:disabled {
+  color: #94A3B8 !important;
+  border-color: #E2E8F0 !important;
+  background: #F8FAFC !important;
+  cursor: not-allowed;
+}
+
+.download-btn {
+  color: #64748B !important;
+  border-radius: 8px !important;
+  width: 36px;
+  height: 36px;
+}
+
+.download-btn:hover {
+  color: #1479FF !important;
+  background: #EFF6FF !important;
+}
+
+/* Footer */
+.history-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.results-text {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* Empty state */
+.history-empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #F1F5F9;
+  margin-top: 24px;
+}
+
+.history-empty-state .anticon {
+  font-size: 48px;
+  color: #CBD5E1;
+  margin-bottom: 16px;
+}
+
+.history-empty-state p {
+  font-size: 14px;
+  color: #94A3B8;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Patient avatar */
+.consultation-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #FDE8D8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #C2571A;
+  flex-shrink: 0;
+}

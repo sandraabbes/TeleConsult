@@ -1,0 +1,328 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Spin, message } from 'antd';
+import {
+  FileTextOutlined,
+  CalendarOutlined,
+  TeamOutlined,
+  MessageOutlined
+} from '@ant-design/icons';
+import { useAuth } from '../../../context/AuthContext';
+import api from '../../../api/axios';
+import dayjs from 'dayjs';
+import './Dashboard.css';
+
+export default function Dashboard() {
+  const { user } = useAuth();
+  const patientId = user?.id ? String(user.id) : '';
+  const patientName = user?.firstName || 'Patient';
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [medicalRecords, setMedicalRecords] = useState<any[]>([]);
+  const [doctorsMap, setDoctorsMap] = useState<Record<string, any>>({});
+  const [paymentLoading, setPaymentLoading] = useState<number | null>(null);
+
+  const handlePayment = async (appointmentId: number) => {
+    setPaymentLoading(appointmentId);
+    try {
+      const { data: payment } = await api.get(`/payments/rendezvous/${appointmentId}`);
+      if (!payment || !payment.id) {
+        message.error('Payment information not found');
+        return;
+      }
+      
+      const { data } = await api.post(`/payments/${payment.id}/initiate`, {});
+      if (data?.payUrl) {
+        window.location.href = data.payUrl;
+      } else {
+        message.error('Failed to get payment URL');
+      }
+    } catch (error) {
+      console.error('Payment initiation failed', error);
+      message.error('Payment initiation failed');
+    } finally {
+      setPaymentLoading(null);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!patientId || patientId === 'undefined') return;
+      try {
+        setLoading(true);
+        const [apptsRes, recordsRes] = await Promise.all([
+          api.get(`/rendezvous/users/${patientId}/patient`).catch(() => ({ data: [] })),
+          api.get(`/medical-records/patient/${patientId}`).catch(() => ({ data: [] }))
+        ]);
+
+        const appts = Array.isArray(apptsRes.data) ? apptsRes.data : [];
+        const recordsRaw = recordsRes.data;
+        const records = Array.isArray(recordsRaw) 
+          ? recordsRaw 
+          : Array.isArray(recordsRaw?.data) 
+            ? recordsRaw.data 
+            : [];
+
+        // Sort appointments by date
+        appts.sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+        
+        // Sort records by date descending
+        records.sort((a: any, b: any) => new Date(b.consultationDate || b.createdAt).getTime() - new Date(a.consultationDate || a.createdAt).getTime());
+
+        setAppointments(appts);
+        setMedicalRecords(records);
+
+        // Fetch unique doctors
+        const uniqueDoctorIds = [...new Set(appts.map((a: any) => a.medecinId))].filter(Boolean) as number[];
+        
+        const docRes = await Promise.all(
+          uniqueDoctorIds.map(id => api.get(`/register-doctors/${id}`).then(r => ({ id, data: r.data })).catch(() => null))
+        );
+        
+        const dMap: Record<string, any> = {};
+        docRes.forEach(r => {
+          if (r && r.data) {
+            dMap[r.id] = r.data;
+          }
+        });
+        setDoctorsMap(dMap);
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [patientId]);
+
+  const upcomingAppts = appointments.filter(
+    (a) =>
+      (a.status === 'PENDING' || a.status === 'SCHEDULED' || a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION') &&
+      dayjs(a.endTime || a.startTime).isAfter(dayjs())
+  ).slice(0, 4); // show top 4 upcoming
+
+  const recentRecords = medicalRecords.slice(0, 4);
+
+  const getDoctorDetails = (doctorId: number) => {
+    const doc = doctorsMap[doctorId];
+    if (!doc) return { name: 'Unknown Doctor', specialty: 'Doctor' };
+    return {
+      name: doc.fullName || `${doc.firstName || ''} ${doc.lastName || ''}`.trim() || 'Details Unavailable',
+      specialty: doc.speciality || 'General Physician',
+      avatarUrl: doc.profilePhotoUrl || doc.identityImg || null,
+    };
+  };
+
+  const myDoctors = Object.values(doctorsMap).slice(0, 4);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="patient-dashboard">
+      <div className="dashboard-left">
+        <div style={{ marginBottom: 4 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111827', margin: 0 }}>
+            Welcome back, {patientName} 
+          </h1>
+          <p style={{ fontSize: 13, color: '#6B7280', margin: 0 }}>
+            Everything looks good with your health goals this week.
+          </p>
+        </div>
+
+        <div className="dashboard-section">
+          <div className="section-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <CalendarOutlined style={{ color: '#1479FF', fontSize: 16 }} />
+              <span className="section-title">Upcoming Consultations</span>
+            </div>
+            <span
+              className="section-link"
+              onClick={() => navigate('/patient/appointments')}
+            >
+              View all
+            </span>
+          </div>
+
+          <div>
+            {upcomingAppts.length === 0 ? (
+              <div className="empty-state">No upcoming consultations</div>
+            ) : (
+              upcomingAppts.map((appt) => {
+                const doc = getDoctorDetails(appt.medecinId);
+                const startDayjs = dayjs(appt.startTime);
+                return (
+                  <div key={appt.id} className="appointment-row">
+                    <div className="dashboard-avatar">
+                      {doc.avatarUrl ? (
+                         <img src={doc.avatarUrl.startsWith('http') ? doc.avatarUrl : `http://localhost:3000${doc.avatarUrl}`} alt={doc.name} />
+                      ) : (
+                        doc.name.replace('Dr. ', '')[0] || 'D'
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p className="row-title">{doc.name.startsWith('Dr. ') ? doc.name : `Dr. ${doc.name}`}</p>
+                      <p className="row-meta">
+                        {doc.specialty} • {startDayjs.format('MMM DD')} at {startDayjs.format('hh:mm A')}
+                      </p>
+                    </div>
+                    <div>
+                      {appt.status === 'CONFIRMED' || appt.status === 'AWAITING_CONSULTATION' ? (
+                        (() => {
+                          const minutesUntil = dayjs(appt.startTime).diff(dayjs(), 'minute');
+                          const isWithin15Min = minutesUntil <= 15 && minutesUntil >= -60;
+                          const isDoctorReady = appt.doctorInWaitingRoom === true;
+                          
+                          return (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
+                              {isDoctorReady && (
+                                <span style={{ fontSize: 10, fontWeight: 700, color: '#16A34A', background: '#DCFCE7', padding: '2px 8px', borderRadius: 10, whiteSpace: 'nowrap' }}>
+                                  Doctor is ready!
+                                </span>
+                              )}
+                              <Button 
+                                className="action-btn-primary" 
+                                disabled={!isWithin15Min}
+                                onClick={() => navigate(`/patient/waiting-room/${appt.id}`)}
+                                style={{
+                                  background: isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0',
+                                  color: isWithin15Min ? '#fff' : '#94A3B8',
+                                  borderColor: isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0',
+                                  opacity: isWithin15Min ? 1 : 0.6,
+                                }}
+                              >
+                                {isWithin15Min ? 'Join Meeting' : startDayjs.format('hh:mm A')}
+                              </Button>
+                            </div>
+                          );
+                        })()
+                      ) : appt.status === 'SCHEDULED' ? (
+                        <Button 
+                          className="action-btn-primary" 
+                          style={{ background: '#F59E0B', borderColor: '#F59E0B' }} 
+                          loading={paymentLoading === appt.id}
+                          onClick={() => handlePayment(appt.id)}
+                        >
+                          Pay Now
+                        </Button>
+                      ) : (
+                        <Button className="action-btn-secondary" onClick={() => navigate(`/patient/appointments`)}>
+                          View Details
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        <div className="dashboard-section">
+          <div className="section-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <FileTextOutlined style={{ color: '#1479FF', fontSize: 16 }} />
+              <span className="section-title">Recent medical records</span>
+            </div>
+            <span
+              className="section-link"
+              onClick={() => navigate('/patient/consultations')}
+            >
+              View All
+            </span>
+          </div>
+
+          <div>
+            {recentRecords.length === 0 ? (
+              <div className="empty-state">No medical records yet</div>
+            ) : (
+              recentRecords.map((record) => {
+                const dateStr = dayjs(record.consultationDate || record.createdAt).format('MMM DD, YYYY');
+                const pres = record.prescriptions?.[0];
+                const subtitle = pres ? `${pres.medicationName} ${pres.dosage ? pres.dosage : ''}` : 'General Consultation';
+                return (
+                  <div key={record.id} className="appointment-row">
+                    <div className="record-icon">
+                      <FileTextOutlined style={{ fontSize: 16 }} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p className="row-title">{record.diagnosis || 'Medical Record'}</p>
+                      <p className="row-meta">{subtitle}</p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <p className="row-meta" style={{ marginBottom: 4 }}>{dateStr}</p>
+                      <Button className="action-btn-primary" onClick={() => navigate(`/patient/consultations/${record.rendezvousId || record.id}`)}>
+                        View Record
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="dashboard-right">
+        <div className="dashboard-section">
+          <div className="section-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <TeamOutlined style={{ color: '#1479FF', fontSize: 16 }} />
+              <span className="section-title">My Doctors</span>
+            </div>
+          </div>
+
+          <div>
+            {myDoctors.length === 0 ? (
+              <div className="empty-state">No doctors yet</div>
+            ) : (
+              myDoctors.map((doc) => {
+                const nameStr = doc.fullName || `${doc.firstName || ''} ${doc.lastName || ''}`.trim();
+                const displayName = nameStr.startsWith('Dr. ') ? nameStr : `Dr. ${nameStr}`;
+                const initial = displayName.replace('Dr. ', '')[0] || 'D';
+                return (
+                  <div key={doc.id} className="appointment-row">
+                    <div className="dashboard-avatar">
+                      {doc.profilePhotoUrl ? (
+                         <img src={doc.profilePhotoUrl.startsWith('http') ? doc.profilePhotoUrl : `http://localhost:3000${doc.profilePhotoUrl}`} alt={displayName} />
+                      ) : (
+                        initial
+                      )}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="row-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {displayName}
+                      </p>
+                      <p className="row-meta">{doc.speciality || 'General Physician'}</p>
+                    </div>
+                    <Button 
+                      type="text" 
+                      icon={<MessageOutlined style={{ color: '#1479FF' }} />} 
+                      style={{ background: '#F8FAFC' }}
+                      onClick={() => navigate(`/patient/messages?doctorId=${doc.id}`)} 
+                    />
+                  </div>
+                );
+              })
+            )}
+          </div>
+          
+          <div style={{ marginTop: 16 }}>
+             <Button block type="primary" style={{ background: '#1479FF', fontWeight: 600, height: 38, borderRadius: 8 }} onClick={() => navigate('/patient/find-doctor')}>
+              Find a Doctor
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

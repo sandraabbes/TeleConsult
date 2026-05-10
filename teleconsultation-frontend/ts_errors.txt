@@ -1,0 +1,2 @@
+﻿src/pages/Register/Register.tsx(7,1): error TS6133: 'UploadProps' is declared but its value is never read.
+src/pages/SetNewPassword/SetNewPassword.tsx(3,37): error TS2724: '"@ant-design/icons"' has no exported member named 'ShieldOutlined'. Did you mean 'IeOutlined'?

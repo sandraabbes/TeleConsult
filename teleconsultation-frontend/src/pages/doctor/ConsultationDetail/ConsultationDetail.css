@@ -1,0 +1,242 @@
+.detail-page {
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+}
+
+.detail-container {
+  /*max-width: 1200px;
+  margin: 0 auto;*/
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-bottom: 8px;
+}
+
+.back-btn:hover {
+  color: #1479FF;
+}
+
+/* Header */
+.detail-header {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #F1F5F9;
+}
+
+.patient-avatar-detail {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #FDE8D8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #C2571A;
+  flex-shrink: 0;
+}
+
+.blood-type-badge {
+  background: #EFF6FF;
+  color: #1479FF;
+  border: 1px solid #BFDBFE;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+
+.consultation-meta {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+/* Section header row */
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.item-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+}
+
+/* AI Summary */
+.ai-summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #F1F5F9;
+}
+
+.ai-summary-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.monitor-image-full {
+  width: 220px;
+  border-radius: 12px;
+  object-fit: cover;
+  align-self: stretch;
+  max-height: 100%;
+}
+
+.overview-text h3 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1479FF;
+  letter-spacing: 0.08em;
+  margin: 0 0 16px 0;
+}
+
+.overview-text p {
+  font-size: 14px;
+  color: #334155;
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+}
+
+.overview-text p strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Actions grid */
+.actions-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Prescriptions */
+.prescription-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prescription-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid #F1F5F9;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+
+.prescription-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.pill-icon-container {
+  background: #EFF6FF;
+  color: #1479FF;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.p-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 3px 0;
+}
+
+.p-instruction {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+  font-weight: 500;
+}
+
+.p-duration {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1479FF;
+  background: #EFF6FF;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Notes */
+.notes-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 32px;
+  border: 1px solid #F1F5F9;
+}
+
+.notes-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notes-bullet-list li {
+  position: relative;
+  padding: 10px 0 10px 20px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.6;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.notes-bullet-list li:last-child {
+  border-bottom: none;
+}
+
+.notes-bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1479FF;
+}

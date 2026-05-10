@@ -1,0 +1,242 @@
+/* ─────── Patient Consultations Page ─────── */
+.pat-consults-page {
+  gap: 24px;
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100%;
+  font-family: 'Manrope', sans-serif;
+}
+
+.pat-consults-page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+}
+
+.pat-consults-page-header p {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Filters */
+.pat-consults-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.pat-consults-filters .filter-select .ant-select-selector {
+  background: white !important;
+  border-radius: 8px !important;
+  border: 1px solid #E2E8F0 !important;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #334155;
+  height: 38px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* List */
+.pat-consults-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+/* Card */
+.pat-consult-card {
+  background: white;
+  border-radius: 16px;
+  padding: 15px 24px;
+  display: grid;
+  grid-template-columns: 1.3fr 1.2fr 0.8fr 1fr;
+  align-items: center;
+  border: 1px solid #F1F5F9;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pat-consult-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* Doctor info */
+.pat-consult-doc-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pat-consult-doc-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #EFF6FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1479FF;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.pat-consult-doc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pat-consult-label-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #1479FF;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px 0;
+  display: block;
+}
+
+.pat-consult-doc-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+}
+
+.pat-consult-doc-specialty {
+  font-size: 12px;
+  color: #94A3B8;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Appointment section */
+.pat-consult-appt-section {
+  padding-left: 16px;
+}
+
+.pat-consult-appt-type {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+}
+
+.pat-consult-appt-date {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Consultation ID */
+.pat-consult-id-section {
+  padding-left: 16px;
+}
+
+.pat-consult-id-value {
+  margin-top: 4px;
+  font-weight: 500;
+  color: #334155;
+}
+
+/* Actions */
+.pat-consult-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.pat-consult-view-btn {
+  border-radius: 8px !important;
+  color: #1479FF !important;
+  border-color: #DBEAFE !important;
+  font-weight: 600 !important;
+  background: #EFF6FF !important;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.pat-consult-view-btn:hover:not(:disabled) {
+  background: #DBEAFE !important;
+  border-color: #93C5FD !important;
+}
+
+.pat-consult-download-btn {
+  color: #64748B !important;
+  border-radius: 8px !important;
+  width: 36px;
+  height: 36px;
+}
+
+.pat-consult-download-btn:hover {
+  color: #1479FF !important;
+  background: #EFF6FF !important;
+}
+
+/* Footer */
+.pat-consults-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.pat-consults-results-text {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* Empty state */
+.pat-consults-empty {
+  text-align: center;
+  padding: 64px 24px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid #F1F5F9;
+  margin-top: 20px;
+}
+
+.pat-consults-empty .anticon {
+  font-size: 48px;
+  color: #CBD5E1;
+  margin-bottom: 16px;
+}
+
+.pat-consults-empty p {
+  font-size: 14px;
+  color: #94A3B8;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Responsiveness */
+@media (max-width: 900px) {
+  .pat-consult-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .pat-consult-appt-section,
+  .pat-consult-id-section {
+    padding-left: 0;
+  }
+}

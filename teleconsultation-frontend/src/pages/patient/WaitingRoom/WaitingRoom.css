@@ -1,0 +1,221 @@
+.patient-wr {
+  max-width: 560px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+.patient-wr-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  padding: 36px 32px;
+  text-align: center;
+}
+
+.patient-wr-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+}
+
+.patient-wr-subtitle {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0 0 28px 0;
+}
+
+/* Doctor presence */
+.pwr-doctor-status {
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.pwr-doctor-status.waiting {
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+}
+
+.pwr-doctor-status.ready {
+  background: #DCFCE7;
+  border: 1px solid #BBF7D0;
+}
+
+.pwr-doctor-status.started {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+}
+
+.pwr-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pwr-icon.waiting { background: #FDE68A; color: #D97706; }
+.pwr-icon.ready { background: #BBF7D0; color: #16A34A; }
+.pwr-icon.started { background: #BFDBFE; color: #1479FF; }
+
+.pwr-status-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 2px 0;
+}
+
+.pwr-status-desc {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Waiting animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.pwr-waiting-anim {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pwr-waiting-anim span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #CBD5E1;
+  animation: float 1.4s ease-in-out infinite;
+}
+
+.pwr-waiting-anim span:nth-child(2) { animation-delay: 0.2s; }
+.pwr-waiting-anim span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Join button */
+.pwr-join-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.pwr-join-btn.enabled {
+  background: #22C55E;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+.pwr-join-btn.enabled:hover {
+  background: #16A34A;
+  transform: translateY(-1px);
+}
+
+.pwr-join-btn.disabled {
+  background: #F1F5F9;
+  color: #94A3B8;
+  cursor: not-allowed;
+}
+
+/* Payment CTA */
+.pwr-payment-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #1479FF;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.pwr-payment-btn:hover {
+  background: #0F5FCC;
+}
+
+/* Details */
+.pwr-details {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.pwr-details-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  text-transform: uppercase;
+  margin: 0 0 10px 0;
+  text-align: left;
+}
+
+.pwr-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.pwr-detail-item {
+  background: #F8FAFC;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.pwr-detail-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.pwr-detail-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-top: 2px;
+}
+
+.pwr-back-btn {
+  margin-top: 16px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.pwr-back-btn:hover {
+  background: #F1F5F9;
+}

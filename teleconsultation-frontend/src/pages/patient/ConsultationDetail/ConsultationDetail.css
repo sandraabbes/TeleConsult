@@ -1,0 +1,253 @@
+/* ─────── Patient Consultation Detail ─────── */
+.pat-detail-page {
+  padding: 24px;
+  background: #F6F8F8;
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+}
+
+.pat-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Back button */
+.pat-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-bottom: 8px;
+}
+
+.pat-detail-back:hover {
+  color: #1479FF;
+}
+
+/* Consultation info bar */
+.pat-detail-info-bar {
+  background: white;
+  border-radius: 14px;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #F1F5F9;
+}
+
+.pat-detail-info-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pat-detail-info-left span {
+  font-size: 13px;
+  color: #64748B;
+}
+
+.pat-detail-info-left strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Section header row */
+.pat-section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.pat-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.pat-item-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+}
+
+/* AI Summary */
+.pat-ai-summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #F1F5F9;
+}
+
+.pat-ai-summary-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.pat-monitor-image {
+  width: 220px;
+  border-radius: 12px;
+  object-fit: cover;
+  align-self: stretch;
+  max-height: 100%;
+}
+
+.pat-overview-text h3 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1479FF;
+  letter-spacing: 0.08em;
+  margin: 0 0 16px 0;
+}
+
+.pat-overview-text p {
+  font-size: 14px;
+  color: #334155;
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+}
+
+.pat-overview-text p strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Actions grid */
+.pat-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Prescriptions */
+.pat-prescription-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pat-prescription-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid #F1F5F9;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+
+.pat-prescription-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.pat-pill-icon {
+  background: #EFF6FF;
+  color: #1479FF;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pat-p-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 3px 0;
+}
+
+.pat-p-instruction {
+  font-size: 12px;
+  color: #64748B;
+  margin: 0;
+  font-weight: 500;
+}
+
+.pat-p-duration {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1479FF;
+  background: #EFF6FF;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Notes */
+.pat-notes-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 32px;
+  border: 1px solid #F1F5F9;
+}
+
+.pat-notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pat-notes-list li {
+  position: relative;
+  padding: 10px 0 10px 20px;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.6;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.pat-notes-list li:last-child {
+  border-bottom: none;
+}
+
+.pat-notes-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #1479FF;
+}
+
+/* Files */
+.pat-files-section {
+  margin-top: 24px;
+}
+
+.pat-empty-text {
+  color: #94A3B8;
+  font-size: 13px;
+  margin: 0;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .pat-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pat-ai-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pat-monitor-image {
+    width: 100%;
+    max-height: 180px;
+  }
+}
