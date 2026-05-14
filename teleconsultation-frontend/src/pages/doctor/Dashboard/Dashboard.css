@@ -107,13 +107,13 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: #FDE8D8;
+  background: #1677ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #C2571A;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
   flex-shrink: 0;
 }
 

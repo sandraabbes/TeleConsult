@@ -164,7 +164,7 @@ export default function MyConsultations() {
                   <div className="pat-consult-doc-avatar">
                     {doc.profilePhotoUrl ? (
                       <img
-                        src={doc.profilePhotoUrl.startsWith('http') ? doc.profilePhotoUrl : `http://localhost:3000${doc.profilePhotoUrl}`}
+                        src={doc.profilePhotoUrl.startsWith('http') ? doc.profilePhotoUrl : `http://localhost:3045${doc.profilePhotoUrl}`}
                         alt={displayName}
                       />
                     ) : (

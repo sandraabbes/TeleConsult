@@ -26,6 +26,7 @@ import PatientWaitingRoom from '../pages/patient/WaitingRoom/WaitingRoom'
 import PatientVideoConsultation from '../pages/patient/VideoConsultation/VideoConsultation'
 import PatientProfile from '../pages/patient/Profile/Profile'
 import PatientMessages from '../pages/patient/Messages/Messages'
+import DoctorProfilePage from '../pages/patient/DoctorProfile/DoctorProfile'
 
 import DoctorDashboard from '../pages/doctor/Dashboard/Dashboard'
 import DoctorAppointments from '../pages/doctor/MyAppointments/MyAppointments'
@@ -72,6 +73,7 @@ const AppRouter = () => {
         <Route element={<ProtectedRoute allowedType="PATIENT"><PatientLayout /></ProtectedRoute>}>
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
           <Route path="/patient/find-doctor" element={<FindDoctor />} />
+          <Route path="/patient/doctor/:doctorId" element={<DoctorProfilePage />} />
           <Route path="/patient/book/:doctorId" element={<BookAppointment />} />
           <Route path="/patient/appointments" element={<PatientAppointments />} />
           <Route path="/patient/consultations" element={<PatientConsultations />} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Input, Select, Button, Dropdown, Pagination, Spin, message } from 'antd'
 import {
   SearchOutlined,
@@ -20,7 +20,15 @@ export default function MyPatients() {
 
   const [patients, setPatients] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchText, setSearchText] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchText, setSearchText] = useState(searchParams.get('q') || '')
+
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q !== null && q !== searchText) {
+      setSearchText(q)
+    }
+  }, [searchParams])
   const [currentPage, setCurrentPage] = useState(1)
   const [sortOrder, setSortOrder] = useState('recent')
   const pageSize = 10
@@ -91,17 +99,8 @@ export default function MyPatients() {
     return parts[0][0]?.toUpperCase() || 'U'
   }
 
-  const getAvatarColor = (name: string) => {
-    const colors = [
-      { bg: '#EFF6FF', text: '#1D4ED8' },
-      { bg: '#FEF3C7', text: '#92400E' },
-      { bg: '#DCFCE7', text: '#166534' },
-      { bg: '#FEE2E2', text: '#991B1B' },
-      { bg: '#EDE9FE', text: '#5B21B6' },
-      { bg: '#FDF2F8', text: '#86198F' },
-    ]
-    const idx = (name.charCodeAt(0) || 0) % colors.length
-    return colors[idx]
+  const getAvatarColor = () => {
+    return { bg: '#1677ff', text: '#ffffff' }
   }
 
   const formatLastVisit = (dateStr: string) => {
@@ -167,7 +166,16 @@ export default function MyPatients() {
           prefix={<SearchOutlined style={{ color: '#9CA3AF' }} />}
           placeholder="Filter by name, ID..."
           value={searchText}
-          onChange={e => { setSearchText(e.target.value); setCurrentPage(1) }}
+          onChange={e => {
+            setSearchText(e.target.value)
+            setCurrentPage(1)
+            if (e.target.value.trim()) {
+              setSearchParams({ q: e.target.value })
+            } else {
+              searchParams.delete('q')
+              setSearchParams(searchParams)
+            }
+          }}
           style={{ maxWidth: 300, borderRadius: 8, height: 36, fontSize: 13 }}
         />
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -195,7 +203,7 @@ export default function MyPatients() {
         </div>
 
         {paginatedPatients.map(patient => {
-          const color = getAvatarColor(patient.fullName)
+          const color = getAvatarColor()
           const age = getAge(patient.birthdate)
           return (
             <div
@@ -218,8 +226,8 @@ export default function MyPatients() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: 13,
-                    fontWeight: 700,
+                    fontSize: 14,
+                    fontWeight: 500,
                     color: color.text,
                     flexShrink: 0
                   }}>

@@ -649,6 +649,35 @@
   position: relative;
 }
 
+/* View Profile button on doctor card */
+.fd-view-profile-btn {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  padding: 5px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #1479FF;
+  background: #FFFFFF;
+  color: #1479FF;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  transition: all 0.2s;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.fd-doctor-card:hover .fd-view-profile-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fd-view-profile-btn:hover {
+  background: #1479FF;
+  color: #FFFFFF;
+}
+
 /* ──── RESPONSIVENESS ──── */
 @media (max-width: 1050px) {
   .find-doctor-page {

@@ -302,7 +302,7 @@ export default function ConsultationDetail() {
                 </div>
                 <div className="pat-notes-card">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {data.attachments.map((file, idx) => {
+                    {data.attachments.filter((file) => file.url).map((file, idx) => {
                       const fileUrl = file.url.startsWith('http') ? file.url : `${config.API_BASE_URL.replace('/api', '')}${file.url}`
                       return (
                         <a

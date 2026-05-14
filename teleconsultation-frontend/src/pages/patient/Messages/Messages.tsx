@@ -26,6 +26,7 @@ interface DoctorInfo {
   id: string;
   fullName: string;
   initials: string;
+  profilePhotoUrl?: string;
 }
 
 const Messages: React.FC = () => {
@@ -78,7 +79,8 @@ const Messages: React.FC = () => {
               let fullName = p.fullName || `${p.firstName || ''} ${p.lastName || ''}`.trim() || p.email || 'Unknown';
               if (!fullName.startsWith('Dr. ')) fullName = `Dr. ${fullName}`;
               const initials = getInitialsFromName(fullName);
-              return { id, fullName, initials } as DoctorInfo;
+              const profilePhotoUrl = p.profilePhotoUrl || null;
+              return { id, fullName, initials, profilePhotoUrl } as DoctorInfo;
             })
             .catch(() => ({ id, fullName: `Doctor ${id.substring(0, 6)}`, initials: 'D' } as DoctorInfo))
         )
@@ -353,6 +355,7 @@ const Messages: React.FC = () => {
         name: doctorData.fullName,
         initial: doctorData.initials,
         id: otherId,
+        profilePhotoUrl: doctorData.profilePhotoUrl,
       };
     }
 
@@ -360,6 +363,7 @@ const Messages: React.FC = () => {
       name: `Doctor ${otherId.substring(0, 6)}`,
       initial: 'D',
       id: otherId,
+      profilePhotoUrl: undefined,
     };
   };
 
@@ -418,7 +422,7 @@ const Messages: React.FC = () => {
                       className="search-dropdown-item"
                       onClick={() => openOrCreateConversation(p.id)}
                     >
-                      <Avatar size={32} style={{ backgroundColor: '#1677ff', flexShrink: 0 }}>
+                      <Avatar size={32} style={{ backgroundColor: '#1677ff', flexShrink: 0 }} src={p.profilePhotoUrl ? (p.profilePhotoUrl.startsWith('http') ? p.profilePhotoUrl : `http://localhost:3045${p.profilePhotoUrl}`) : undefined}>
                         {p.initials}
                       </Avatar>
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -464,7 +468,7 @@ const Messages: React.FC = () => {
                   onClick={() => setActiveConversationId(conv.id)}
                 >
                   <div className="conversation-avatar-container">
-                    <Avatar size={48} style={{ backgroundColor: '#1677ff' }}>
+                    <Avatar size={48} style={{ backgroundColor: '#1677ff' }} src={u.profilePhotoUrl ? (u.profilePhotoUrl.startsWith('http') ? u.profilePhotoUrl : `http://localhost:3045${u.profilePhotoUrl}`) : undefined}>
                       {u.initial}
                     </Avatar>
                     <div className="online-indicator"></div>
@@ -490,7 +494,7 @@ const Messages: React.FC = () => {
         {activeConversationId && otherUser ? (
           <>
             <div className="chat-header">
-              <Avatar size={40} style={{ backgroundColor: '#1677ff' }}>
+              <Avatar size={40} style={{ backgroundColor: '#1677ff' }} src={otherUser.profilePhotoUrl ? (otherUser.profilePhotoUrl.startsWith('http') ? otherUser.profilePhotoUrl : `http://localhost:3045${otherUser.profilePhotoUrl}`) : undefined}>
                 {otherUser.initial}
               </Avatar>
               <div className="chat-header-info">
@@ -525,6 +529,7 @@ const Messages: React.FC = () => {
                         className="message-avatar"
                         size={32}
                         style={{ backgroundColor: '#1677ff' }}
+                        src={otherUser.profilePhotoUrl ? (otherUser.profilePhotoUrl.startsWith('http') ? otherUser.profilePhotoUrl : `http://localhost:3045${otherUser.profilePhotoUrl}`) : undefined}
                       >
                         {otherUser.initial}
                       </Avatar>

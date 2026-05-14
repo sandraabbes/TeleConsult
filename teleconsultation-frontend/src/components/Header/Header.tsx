@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Input, Badge, Spin } from 'antd'
 import {
   SearchOutlined,
@@ -81,6 +81,26 @@ const Header = () => {
   const [loading, setLoading] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
   const bellRef = useRef<HTMLDivElement>(null)
+  const location = useLocation()
+  
+  // Dynamic search state
+  const [searchValue, setSearchValue] = useState('')
+
+  // Sync search value if navigating from elsewhere with a 'q' param, or reset it
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    setSearchValue(params.get('q') || '')
+  }, [location.search])
+
+  const handleSearch = () => {
+    if (!searchValue.trim()) return
+    const q = encodeURIComponent(searchValue.trim())
+    if (userType === 'PATIENT') {
+      navigate(`/patient/find-doctor?q=${q}`)
+    } else if (userType === 'DOCTOR') {
+      navigate(`/doctor/patients?q=${q}`)
+    }
+  }
 
   // fetch unread count and recent notifications
   useEffect(() => {
@@ -169,6 +189,9 @@ const Header = () => {
         <Input
           prefix={<SearchOutlined style={{ color: '#9CA3AF' }} />}
           placeholder="Search..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onPressEnter={handleSearch}
           style={{
             maxWidth: 400,
             borderRadius: 10,

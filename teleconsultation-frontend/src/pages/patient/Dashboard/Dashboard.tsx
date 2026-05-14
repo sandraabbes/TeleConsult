@@ -24,6 +24,10 @@ export default function Dashboard() {
   const [doctorsMap, setDoctorsMap] = useState<Record<string, any>>({});
   const [paymentLoading, setPaymentLoading] = useState<number | null>(null);
 
+  const getInitials = (name: string) => {
+      return name.replace('Dr. ', '').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'D'
+    }
+
   const handlePayment = async (appointmentId: number) => {
     setPaymentLoading(appointmentId);
     try {
@@ -100,9 +104,13 @@ export default function Dashboard() {
   }, [patientId]);
 
   const upcomingAppts = appointments.filter(
-    (a) =>
-      (a.status === 'PENDING' || a.status === 'SCHEDULED' || a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION') &&
-      dayjs(a.endTime || a.startTime).isAfter(dayjs())
+    (a) => {
+      const s = (a.status || '').toUpperCase();
+      return (
+        (s === 'PENDING' || s === 'SCHEDULED' || s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION') &&
+        dayjs(a.endTime || a.startTime).isAfter(dayjs())
+      );
+    }
   ).slice(0, 4); // show top 4 upcoming
 
   const recentRecords = medicalRecords.slice(0, 4);
@@ -113,7 +121,7 @@ export default function Dashboard() {
     return {
       name: doc.fullName || `${doc.firstName || ''} ${doc.lastName || ''}`.trim() || 'Details Unavailable',
       specialty: doc.speciality || 'General Physician',
-      avatarUrl: doc.profilePhotoUrl || doc.identityImg || null,
+      profilePhotoUrl: doc.profilePhotoUrl || doc.identityImg || null,
     };
   };
 
@@ -160,13 +168,21 @@ export default function Dashboard() {
               upcomingAppts.map((appt) => {
                 const doc = getDoctorDetails(appt.medecinId);
                 const startDayjs = dayjs(appt.startTime);
+                const displayName = doc.name;
                 return (
                   <div key={appt.id} className="appointment-row">
-                    <div className="dashboard-avatar">
-                      {doc.avatarUrl ? (
-                         <img src={doc.avatarUrl.startsWith('http') ? doc.avatarUrl : `http://localhost:3000${doc.avatarUrl}`} alt={doc.name} />
+                    <div className="pat-doc-avatar">
+                      {doc.profilePhotoUrl ? (
+                        <img
+                          src={
+                            doc.profilePhotoUrl.startsWith('http')
+                              ? doc.profilePhotoUrl
+                              : `http://localhost:3045${doc.profilePhotoUrl}`
+                          }
+                          alt={displayName}
+                        />
                       ) : (
-                        doc.name.replace('Dr. ', '')[0] || 'D'
+                        getInitials(displayName)
                       )}
                     </div>
                     <div style={{ flex: 1 }}>
@@ -176,7 +192,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div>
-                      {appt.status === 'CONFIRMED' || appt.status === 'AWAITING_CONSULTATION' ? (
+                      {(appt.status || '').toUpperCase() === 'CONFIRMED' || (appt.status || '').toUpperCase() === 'AWAITING_CONSULTATION' ? (
                         (() => {
                           const minutesUntil = dayjs(appt.startTime).diff(dayjs(), 'minute');
                           const isWithin15Min = minutesUntil <= 15 && minutesUntil >= -60;
@@ -205,7 +221,7 @@ export default function Dashboard() {
                             </div>
                           );
                         })()
-                      ) : appt.status === 'SCHEDULED' ? (
+                      ) : (appt.status || '').toUpperCase() === 'SCHEDULED' ? (
                         <Button 
                           className="action-btn-primary" 
                           style={{ background: '#F59E0B', borderColor: '#F59E0B' }} 
@@ -288,14 +304,20 @@ export default function Dashboard() {
               myDoctors.map((doc) => {
                 const nameStr = doc.fullName || `${doc.firstName || ''} ${doc.lastName || ''}`.trim();
                 const displayName = nameStr.startsWith('Dr. ') ? nameStr : `Dr. ${nameStr}`;
-                const initial = displayName.replace('Dr. ', '')[0] || 'D';
                 return (
                   <div key={doc.id} className="appointment-row">
-                    <div className="dashboard-avatar">
+                    <div className="pat-doc-avatar">
                       {doc.profilePhotoUrl ? (
-                         <img src={doc.profilePhotoUrl.startsWith('http') ? doc.profilePhotoUrl : `http://localhost:3000${doc.profilePhotoUrl}`} alt={displayName} />
+                        <img
+                          src={
+                            doc.profilePhotoUrl.startsWith('http')
+                              ? doc.profilePhotoUrl
+                              : `http://localhost:3045${doc.profilePhotoUrl}`
+                          }
+                          alt={displayName}
+                        />
                       ) : (
-                        initial
+                        getInitials(displayName)
                       )}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>

@@ -23,6 +23,8 @@ import { ConfigService } from '@nestjs/config';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import * as FormData from 'form-data';
+import * as fs from 'fs';
+import * as path from 'path';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtDoctorGuard } from 'src/common/guards/jwt-doctor.guard';
 import { JwtPatientOrDoctorGuard } from 'src/common/guards/jwt-patient-or-doctor.guard';
@@ -163,7 +165,7 @@ export class GatewayRegisterDoctorController {
         city: data.city || '',
         country: data.country || '',
         birthDate: data.birthDate || '',
-        avatarUrl: data.avatar || data.photo || data.identityImg || null,
+        avatarUrl: data.profilePhotoUrl || data.avatar || data.photo || data.identityImg || null,
         // Include notification preferences if they exist
         appointmentReminders: data.appointmentReminders ?? true,
         medicationReminders: data.medicationReminders ?? true,
@@ -254,12 +256,22 @@ export class GatewayRegisterDoctorController {
     @Body() body: any,
     @Req() req: Request,
   ) {
-    if (!body || Object.keys(body).length === 0) {
+    if ((!body || Object.keys(body).length === 0) && (!files || files.length === 0)) {
       throw new BadRequestException('Aucune donnée envoyée pour la mise à jour');
     }
 
     const token = this.extractToken(req);
     const formData = new FormData();
+
+    // Handle profilePhoto: save to gateway's uploads dir and send URL to ms-doctors
+    const profilePhotoFile = files?.find(f => f.fieldname === 'profilePhoto');
+    if (profilePhotoFile) {
+      const uploadDir = path.join(__dirname, '../../uploads/avatars');
+      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+      const filename = `${Date.now()}-${profilePhotoFile.originalname}`;
+      fs.writeFileSync(path.join(uploadDir, filename), profilePhotoFile.buffer);
+      formData.append('profilePhotoUrl', `/uploads/avatars/${filename}`);
+    }
 
     for (const key in body) {
       if (body[key] !== undefined && body[key] !== null) {
@@ -269,7 +281,9 @@ export class GatewayRegisterDoctorController {
 
     if (files && files.length > 0) {
       files.forEach((file) => {
-        formData.append(file.fieldname, file.buffer, file.originalname);
+        if (file.fieldname !== 'profilePhoto') {
+          formData.append(file.fieldname, file.buffer, file.originalname);
+        }
       });
     }
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Spin, message } from 'antd'
 import {
   SearchOutlined,
@@ -45,11 +46,20 @@ export default function FindDoctor() {
   const { user } = useAuth()
   const patientId = user?.id ? String(user.id) : ''
   const patientName = user?.fullName || user?.firstName || 'Patient'
+  const navigate = useNavigate()
 
   // Doctors
   const [doctors, setDoctors] = useState<Doctor[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
+
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q !== null && q !== searchQuery) {
+      setSearchQuery(q)
+    }
+  }, [searchParams])
   const [specialtyFilter, setSpecialtyFilter] = useState<string | null>(null)
   const [showSpecialtyDropdown, setShowSpecialtyDropdown] = useState(false)
   const specialtyRef = useRef<HTMLDivElement>(null)
@@ -351,7 +361,15 @@ export default function FindDoctor() {
             className="fd-search-input"
             placeholder="Search by name, specialty or city..."
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => {
+              setSearchQuery(e.target.value)
+              if (e.target.value.trim()) {
+                setSearchParams({ q: e.target.value })
+              } else {
+                searchParams.delete('q')
+                setSearchParams(searchParams)
+              }
+            }}
           />
         </div>
 
@@ -525,7 +543,7 @@ export default function FindDoctor() {
                         src={
                           doc.profilePhotoUrl.startsWith('http')
                             ? doc.profilePhotoUrl
-                            : `http://localhost:3000${doc.profilePhotoUrl}`
+                            : `http://localhost:3045${doc.profilePhotoUrl}`
                         }
                         alt={doc.fullName}
                       />
@@ -573,7 +591,17 @@ export default function FindDoctor() {
                     </div>
                   </div>
 
-                  <div className="fd-online-dot" style={{ background: isAvailable ? '#22C55E' : '#F59E0B' }} />
+                  
+
+                  <button
+                    className="fd-view-profile-btn"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      navigate(`/patient/doctor/${doc.id}`)
+                    }}
+                  >
+                    View Profile
+                  </button>
                 </div>
               )
             })}

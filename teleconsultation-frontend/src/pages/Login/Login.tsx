@@ -68,6 +68,7 @@ const Login: React.FC = () => {
           email: data.doctor.email,
           fullName: data.doctor.fullName,
           specialty: data.doctor.specialty,
+          avatarUrl: data.doctor.profilePhotoUrl || undefined,
           userType: 'DOCTOR'
         });
         message.success(`Welcome back, ${data.doctor.fullName}!`);

@@ -335,7 +335,7 @@ export default function ConsultationDetail() {
 
   const uploadProps: UploadProps = {
     accept: 'image/*,.pdf',
-    fileList: data?.attachments?.map((a, i) => ({
+    fileList: data?.attachments?.filter((a) => a.url).map((a, i) => ({
       uid: a.uid || String(i),
       name: a.name || `Attachment ${i + 1}`,
       status: (a.status as any) || 'done',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Typography, Divider, Button } from 'antd';
 import {
   AppstoreOutlined,
@@ -28,6 +28,24 @@ const DoctorSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, userType, user } = useAuth();
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'D';
+    return name.split(' ').map(p => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  };
+
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    api.get(`/register-doctors/${user.id}`)
+      .then(res => {
+        if (res.data?.profilePhotoUrl) {
+          setProfilePhotoUrl(res.data.profilePhotoUrl);
+        }
+      })
+      .catch(() => {});
+  }, [user?.id]);
 
   const handleLogout = async () => {
     try {
@@ -123,20 +141,39 @@ const DoctorSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
               cursor: 'pointer'
             }}
           >
-            <div style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              backgroundColor: '#2a8b83', 
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontWeight: 'bold',
-              flexShrink: 0 
-            }}>
-              {user?.fullName?.[0]}
-            </div>
+            {profilePhotoUrl ? (
+              <img
+                src={profilePhotoUrl.startsWith('http') ? profilePhotoUrl : `http://localhost:3045${profilePhotoUrl}`}
+                alt={user?.fullName || 'Doctor'}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  border: '2px solid #EFF6FF',
+                  boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
+                }}
+              />
+            ) : (
+              <div style={{ 
+                width: '40px', 
+                height: '40px', 
+                borderRadius: '50%', 
+                background: 'linear-gradient(135deg, #1479FF 0%, #3B8AFF 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontWeight: 700,
+                fontSize: '14px',
+                flexShrink: 0,
+                border: '2px solid #EFF6FF',
+                boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
+              }}>
+                {getInitials(user?.fullName)}
+              </div>
+            )}
             {!collapsed && (
               <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                 <Text strong style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>

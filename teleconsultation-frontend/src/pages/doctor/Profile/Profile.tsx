@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button, Spin, message } from 'antd'
 import {
   UserOutlined,
@@ -72,6 +72,8 @@ const Profile = () => {
   // Feedback messages
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [avatarUploading, setAvatarUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   /* ── Fetch profile ── */
   const fetchProfile = useCallback(async () => {
@@ -80,6 +82,10 @@ const Profile = () => {
     try {
       const res = await api.get(`/register-doctors/${doctorId}`)
       setDoctor(res.data)
+      // Sync avatar to AuthContext for sidebar and other components
+      if (res.data?.profilePhotoUrl) {
+        updateUser({ avatarUrl: res.data.profilePhotoUrl })
+      }
     } catch {
       message.error('Failed to load profile')
     } finally {
@@ -240,6 +246,43 @@ const Profile = () => {
     return <span className="profile-value">{value}</span>
   }
 
+  /* ── Avatar upload ── */
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !doctor) return
+
+    // Validate file
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp']
+    if (!validTypes.includes(file.type)) {
+      message.error('Please select a JPG, PNG, or WebP image')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      message.error('Image must be less than 5MB')
+      return
+    }
+
+    setAvatarUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('profilePhoto', file)
+
+      const res = await api.patch(`/register-doctors/${doctor.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      const newUrl = res.data?.profilePhotoUrl || doctor.profilePhotoUrl
+      setDoctor(prev => prev ? { ...prev, profilePhotoUrl: newUrl } : prev)
+      updateUser({ avatarUrl: newUrl })
+      setSuccessMsg('Profile photo updated successfully')
+    } catch (err: any) {
+      setErrorMsg(err?.response?.data?.message || 'Failed to upload photo')
+    } finally {
+      setAvatarUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -314,12 +357,31 @@ const Profile = () => {
       <div className="profile-avatar-section">
         <div className="profile-avatar-wrapper">
           {doctor.profilePhotoUrl ? (
-            <img src={doctor.profilePhotoUrl} alt={doctor.fullName} className="profile-avatar" />
+            <img
+              src={doctor.profilePhotoUrl.startsWith('http') ? doctor.profilePhotoUrl : `http://localhost:3045${doctor.profilePhotoUrl}`}
+              alt={doctor.fullName}
+              className="profile-avatar"
+            />
           ) : (
             <div className="profile-avatar-placeholder">
               {getInitials(doctor.fullName)}
             </div>
           )}
+          <button
+            className="profile-avatar-edit-btn"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={avatarUploading}
+            title="Change profile photo"
+          >
+            {avatarUploading ? <Spin size="small" /> : <EditOutlined />}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            style={{ display: 'none' }}
+            onChange={handleAvatarChange}
+          />
         </div>
         <div className="profile-avatar-info">
           <h2 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

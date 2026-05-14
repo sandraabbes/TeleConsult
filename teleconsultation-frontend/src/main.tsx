@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, App as AntdApp } from 'antd'
 import { AuthProvider } from './context/AuthContext'
 import { AdminAuthProvider } from './context/AdminAuthContext'
 import App from './App'
@@ -34,11 +34,13 @@ const theme = {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ConfigProvider theme={theme}>
-      <AuthProvider>
-        <AdminAuthProvider>
-          <App />
-        </AdminAuthProvider>
-      </AuthProvider>
+      <AntdApp>
+        <AuthProvider>
+          <AdminAuthProvider>
+            <App />
+          </AdminAuthProvider>
+        </AuthProvider>
+      </AntdApp>
     </ConfigProvider>
   </React.StrictMode>
 )

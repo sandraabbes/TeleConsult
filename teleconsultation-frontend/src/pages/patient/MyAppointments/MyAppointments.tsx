@@ -391,7 +391,7 @@ export default function MyAppointments() {
                         src={
                           doc.profilePhotoUrl.startsWith('http')
                             ? doc.profilePhotoUrl
-                            : `http://localhost:3000${doc.profilePhotoUrl}`
+                            : `http://localhost:3045${doc.profilePhotoUrl}`
                         }
                         alt={doc.name}
                       />
@@ -459,7 +459,7 @@ export default function MyAppointments() {
                         src={
                           doc.profilePhotoUrl.startsWith('http')
                             ? doc.profilePhotoUrl
-                            : `http://localhost:3000${doc.profilePhotoUrl}`
+                            : `http://localhost:3045${doc.profilePhotoUrl}`
                         }
                         alt={doc.name}
                       />
