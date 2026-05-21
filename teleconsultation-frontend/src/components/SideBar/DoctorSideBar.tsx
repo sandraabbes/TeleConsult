@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Typography, Divider, Button } from 'antd';
+import { Layout, Menu, Typography, Divider, Button, Drawer } from 'antd';
 import {
   AppstoreOutlined,
   CalendarOutlined,
@@ -22,9 +22,18 @@ const { Text } = Typography;
 interface SidebarProps {
   collapsed: boolean;
   setCollapsed: (val: boolean) => void;
+  drawerMode?: boolean;
+  drawerVisible?: boolean;
+  onDrawerClose?: () => void;
 }
 
-const DoctorSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
+const DoctorSideBar: React.FC<SidebarProps> = ({
+  collapsed,
+  setCollapsed,
+  drawerMode = false,
+  drawerVisible = false,
+  onDrawerClose,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { logout, userType, user } = useAuth();
@@ -71,8 +80,152 @@ const DoctorSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
 
   const onMenuClick = (e: any) => {
     navigate(`/doctor/${e.key}`);
+    if (drawerMode && onDrawerClose) {
+      onDrawerClose();
+    }
   };
 
+  const sidebarContent = (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div
+        style={{
+          padding: '20px 19px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          minHeight: '80px',
+        }}
+        onClick={() => {
+          if (drawerMode && onDrawerClose) {
+            onDrawerClose();
+          } else {
+            setCollapsed(!collapsed);
+          }
+        }}
+      >
+        <img
+          src={collapsed && !drawerMode ? smallLogo : teleconsultLogo}
+          alt="Logo"
+          style={{
+            maxHeight: '40px',
+            maxWidth: '100%',
+            objectFit: 'contain',
+            transition: 'all 0.2s',
+          }}
+        />
+      </div>
+
+      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '0 8px' }}>
+        <Menu
+          mode="inline"
+          inlineCollapsed={drawerMode ? false : collapsed}
+          selectedKeys={[menuItems.find(item => location.pathname.includes(`/${item.key}`))?.key || 'dashboard']}
+          items={menuItems}
+          onClick={onMenuClick}
+          style={{ borderRight: 0 }}
+        />
+      </div>
+
+      <div style={{ padding: '16px', background: '#fff' }}>
+        <Divider style={{ margin: '8px 0 16px 0' }} />
+        
+        <div 
+          onClick={() => {
+            navigate('/doctor/profile');
+            if (drawerMode && onDrawerClose) onDrawerClose();
+          }}
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '12px', 
+            padding: (collapsed && !drawerMode) ? '0' : '0 8px', 
+            marginBottom: '16px', 
+            justifyContent: (collapsed && !drawerMode) ? 'center' : 'flex-start',
+            cursor: 'pointer'
+          }}
+        >
+          {profilePhotoUrl ? (
+            <img
+              src={profilePhotoUrl.startsWith('http') ? profilePhotoUrl : `http://localhost:3045${profilePhotoUrl}`}
+              alt={user?.fullName || 'Doctor'}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                flexShrink: 0,
+                border: '2px solid #EFF6FF',
+                boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
+              }}
+            />
+          ) : (
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              borderRadius: '50%', 
+              background: 'linear-gradient(135deg, #1479FF 0%, #3B8AFF 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontWeight: 700,
+              fontSize: '14px',
+              flexShrink: 0,
+              border: '2px solid #EFF6FF',
+              boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
+            }}>
+              {getInitials(user?.fullName)}
+            </div>
+          )}
+          {(!collapsed || drawerMode) && (
+            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <Text strong style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>
+                {user?.fullName} 
+              </Text>
+              <Text type="secondary" style={{ fontSize: '11px', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                {user?.specialty || 'Doctor'}
+              </Text>
+            </div>
+          )}
+        </div>
+        
+        <Button 
+          type="text" 
+          icon={<LogoutOutlined style={{ fontSize: '18px' }} />} 
+          onClick={handleLogout}
+          style={{ 
+            width: '100%', 
+            display: 'flex', 
+            alignItems: 'center',
+            justifyContent: (collapsed && !drawerMode) ? 'center' : 'flex-start',
+            color: '#666',
+          }}
+        >
+          {(!collapsed || drawerMode) && <span style={{ marginLeft: '8px' }}>Sign Out</span>}
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Drawer mode for mobile
+  if (drawerMode) {
+    return (
+      <Drawer
+        placement="left"
+        open={drawerVisible}
+        onClose={onDrawerClose}
+        width={280}
+        styles={{ body: { padding: 0 } }}
+        closable={false}
+        className="sidebar-drawer"
+      >
+        {sidebarContent}
+      </Drawer>
+    );
+  }
+
+  // Normal sider for tablet/desktop
   return (
     <Sider
       theme="light"
@@ -85,123 +238,14 @@ const DoctorSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
       style={{
         height: '100vh',
         borderRight: '1px solid #f0f0f0',
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
         left: 0,
+        bottom: 0,
         zIndex: 100,
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <div
-          style={{
-            padding: '20px 19px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-            minHeight: '80px',
-          }}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          <img
-            src={collapsed ? smallLogo : teleconsultLogo}
-            alt="Logo"
-            style={{
-              maxHeight: '40px',
-              maxWidth: '100%',
-              objectFit: 'contain',
-              transition: 'all 0.2s',
-            }}
-          />
-        </div>
-
-        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '0 8px' }}>
-          <Menu
-            mode="inline"
-            inlineCollapsed={collapsed} 
-            selectedKeys={[menuItems.find(item => location.pathname.includes(`/${item.key}`))?.key || 'dashboard']}
-            items={menuItems}
-            onClick={onMenuClick}
-            style={{ borderRight: 0 }}
-          />
-        </div>
-
-        <div style={{ padding: '16px', background: '#fff' }}>
-          <Divider style={{ margin: '8px 0 16px 0' }} />
-          
-          <div 
-            onClick={() => navigate('/doctor/profile')}
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '12px', 
-              padding: collapsed ? '0' : '0 8px', 
-              marginBottom: '16px', 
-              justifyContent: collapsed ? 'center' : 'flex-start',
-              cursor: 'pointer'
-            }}
-          >
-            {profilePhotoUrl ? (
-              <img
-                src={profilePhotoUrl.startsWith('http') ? profilePhotoUrl : `http://localhost:3045${profilePhotoUrl}`}
-                alt={user?.fullName || 'Doctor'}
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  flexShrink: 0,
-                  border: '2px solid #EFF6FF',
-                  boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
-                }}
-              />
-            ) : (
-              <div style={{ 
-                width: '40px', 
-                height: '40px', 
-                borderRadius: '50%', 
-                background: 'linear-gradient(135deg, #1479FF 0%, #3B8AFF 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: '14px',
-                flexShrink: 0,
-                border: '2px solid #EFF6FF',
-                boxShadow: '0 2px 8px rgba(20, 121, 255, 0.10)',
-              }}>
-                {getInitials(user?.fullName)}
-              </div>
-            )}
-            {!collapsed && (
-              <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <Text strong style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>
-                  {user?.fullName} 
-                </Text>
-                <Text type="secondary" style={{ fontSize: '11px', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                  {user?.specialty || 'Doctor'}
-                </Text>
-              </div>
-            )}
-          </div>
-          
-          <Button 
-            type="text" 
-            icon={<LogoutOutlined style={{ fontSize: '18px' }} />} 
-            onClick={handleLogout}
-            style={{ 
-              width: '100%', 
-              display: 'flex', 
-              alignItems: 'center',
-              justifyContent: collapsed ? 'center' : 'flex-start',
-              color: '#666',
-            }}
-          >
-            {!collapsed && <span style={{ marginLeft: '8px' }}>Sign Out</span>}
-          </Button>
-        </div>
-      </div>
+      {sidebarContent}
     </Sider>
   );
 };

@@ -331,3 +331,44 @@
   background: #EFF6FF;
   color: #0B5ED7;
 }
+
+/* ──────────── Mobile Header Styles ──────────── */
+
+.header--mobile {
+  height: 56px;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.header-menu-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #F6F8F8;
+  border: 1px solid #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-menu-btn:active {
+  background: #EFF6FF;
+  border-color: #1479FF;
+}
+
+@media (max-width: 767px) {
+  .notif-popover {
+    width: calc(100vw - 32px);
+    right: -8px;
+    max-width: 380px;
+  }
+}
+
+/* ──────────── Sidebar Drawer Override ──────────── */
+.sidebar-drawer .ant-drawer-body {
+  padding: 0 !important;
+}

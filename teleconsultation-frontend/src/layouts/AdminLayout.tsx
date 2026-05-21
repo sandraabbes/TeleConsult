@@ -17,7 +17,13 @@ const AdminLayout = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <AdminSideBar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout style={{ transition: 'all 0.2s ease-in-out' }}>
+      <Layout 
+        className="main-layout" 
+        style={{ 
+          transition: 'all 0.2s ease-in-out',
+          marginLeft: collapsed ? 80 : 260 
+        }}
+      >
         <Content>
           <Outlet />
         </Content>

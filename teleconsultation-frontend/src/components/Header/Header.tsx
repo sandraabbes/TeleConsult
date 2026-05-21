@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Input, Badge, Spin } from 'antd'
+import { Input, Badge, Spin, Grid } from 'antd'
 import {
   SearchOutlined,
   BellOutlined,
@@ -9,6 +9,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   ArrowRightOutlined,
+  MenuOutlined,
 } from '@ant-design/icons'
 import { useAuth } from '../../context/AuthContext'
 import api from '../../api/axios'
@@ -17,6 +18,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import './Header.css'
 
 dayjs.extend(relativeTime)
+
+const { useBreakpoint } = Grid
 
 /* ── helpers shared with Notifications page ── */
 
@@ -72,8 +75,14 @@ const getNavigationPath = (notification: any, userType: string | null): string |
   }
 }
 
-const Header = () => {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const navigate = useNavigate()
+  const screens = useBreakpoint()
+  const isMobile = !screens.md // < 768px
   const { userType, isAuthenticated } = useAuth()
   const [unreadCount, setUnreadCount] = useState(0)
   const [notifications, setNotifications] = useState<any[]>([])
@@ -184,25 +193,39 @@ const Header = () => {
   const recent = notifications.slice(0, 6)
 
   return (
-    <div className="header">
-      <div className="header-search">
-        <Input
-          prefix={<SearchOutlined style={{ color: '#9CA3AF' }} />}
-          placeholder="Search..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onPressEnter={handleSearch}
-          style={{
-            maxWidth: 400,
-            borderRadius: 10,
-            background: '#F6F8F8',
-            border: '1px solid #F3F4F6',
-            height: 38,
-            fontFamily: 'Manrope',
-            fontSize: 14,
-          }}
-        />
-      </div>
+    <div className={`header ${isMobile ? 'header--mobile' : ''}`}>
+      {/* Mobile: hamburger menu button */}
+      {isMobile && onMenuClick && (
+        <button className="header-menu-btn" onClick={onMenuClick} id="header-menu-btn">
+          <MenuOutlined style={{ fontSize: 18, color: '#374151' }} />
+        </button>
+      )}
+
+      {/* Search bar: hidden on mobile */}
+      {!isMobile && (
+        <div className="header-search">
+          <Input
+            prefix={<SearchOutlined style={{ color: '#9CA3AF' }} />}
+            placeholder="Search..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onPressEnter={handleSearch}
+            style={{
+              maxWidth: 400,
+              borderRadius: 10,
+              background: '#F6F8F8',
+              border: '1px solid #F3F4F6',
+              height: 38,
+              fontFamily: 'Manrope',
+              fontSize: 14,
+            }}
+          />
+        </div>
+      )}
+
+      {/* Mobile: spacer to push right section */}
+      {isMobile && <div style={{ flex: 1 }} />}
+
       <div className="header-right">
         <div className="notif-dropdown-wrapper">
           <Badge count={unreadCount} size="small" color="#1479FF" style={{ cursor: 'pointer' }}>

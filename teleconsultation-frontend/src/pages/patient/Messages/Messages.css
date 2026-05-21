@@ -456,3 +456,69 @@
   align-items: center;
   gap: 4px;
 }
+
+.chat-back-btn {
+  font-size: 18px;
+  color: #111827;
+  margin-right: 12px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.chat-back-btn:hover {
+  background: #f3f4f6;
+}
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .messages-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .messages-sidebar {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .messages-sidebar.sidebar-hidden {
+    transform: translateX(-100%);
+  }
+
+  .chat-main {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .chat-main.chat-hidden {
+    transform: translateX(100%);
+  }
+
+  .chat-header {
+    padding: 12px 16px;
+  }
+  
+  .chat-history {
+    padding: 16px;
+  }
+  
+  .chat-input-container {
+    padding: 12px 16px;
+  }
+  
+  .message-row {
+    max-width: 85%;
+  }
+}

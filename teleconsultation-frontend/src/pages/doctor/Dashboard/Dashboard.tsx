@@ -198,7 +198,7 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        <div className="stat-cards-grid">
           <div className="stat-card">
             <div className="stat-card-icon" style={{ background: '#EFF6FF' }}>
               <CalendarOutlined style={{ color: '#1479FF', fontSize: 20 }} />

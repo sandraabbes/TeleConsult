@@ -13,6 +13,7 @@ import { useConsultationLogic } from '../../../components/Consultation/useConsul
 import { ChatPanel } from '../../../components/Consultation/ChatPanel';
 import { FilesPanel } from '../../../components/Consultation/FilesPanel';
 import { useAuth } from '../../../context/AuthContext';
+import '../../../components/Consultation/VideoConsultation.css';
 
 export const PatientVideoConsultation = () => {
   const { appointmentId } = useParams<{ appointmentId: string }>();
@@ -58,32 +59,23 @@ export const PatientVideoConsultation = () => {
 
   if (state.status === 'WAITING') {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', marginLeft: '80px', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Spin size="large" description="Initializing consultation..." />
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', height: '100vh', marginLeft: '80px', overflow: 'hidden', boxSizing: 'border-box', gap: '16px', padding: '16px', background: 'var(--color-background-tertiary)' }}>
+    <div className="video-consultation-container">
       <style>{`
         .consultation-tabs .ant-tabs-content-holder { flex: 1; overflow: hidden; }
         .consultation-tabs .ant-tabs-content { height: 100%; }
         .consultation-tabs .ant-tabs-tabpane { height: 100%; overflow: hidden; }
       `}</style>
       {/* Main Video Area */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="video-main-area">
         {/* Header */}
-        <div style={{ 
-          background: 'var(--color-background-primary)', 
-          padding: '16px 24px', 
-          borderRadius: 'var(--border-radius-lg)', 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          border: '1px solid var(--color-border-tertiary)',
-          boxShadow: 'var(--shadow-sm)'
-        }}>
+        <div className="video-consultation-header">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff4d4f', boxShadow: '0 0 8px #ff4d4f' }} />
@@ -114,7 +106,7 @@ export const PatientVideoConsultation = () => {
         </div>
 
         {/* Video Container - Google Meet Style */}
-        <div style={{ flex: 1, position: 'relative', background: '#1a1f3a', borderRadius: 'var(--border-radius-lg)', overflow: 'hidden', border: '0.5px solid var(--color-border-tertiary)' }}>
+        <div className="video-container">
           
           {/* Doctor Video (Remote - Large Background) */}
           <video
@@ -136,19 +128,7 @@ export const PatientVideoConsultation = () => {
           )}
 
           {/* Patient Video (Local - Small Overlay) */}
-          <div style={{ 
-            position: 'absolute', 
-            bottom: '16px', 
-            right: '16px', 
-            width: '240px', 
-            height: '135px', 
-            background: '#000', 
-            borderRadius: 'var(--border-radius-md)', 
-            overflow: 'hidden', 
-            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-            border: '2px solid rgba(255,255,255,0.1)',
-            zIndex: 20
-          }}>
+          <div className="local-video-overlay">
             <video
               ref={localVideoRef}
               autoPlay
@@ -164,16 +144,7 @@ export const PatientVideoConsultation = () => {
         </div>
 
           {/* Control Bar */}
-          <div style={{ 
-            background: 'var(--color-background-primary)', 
-            padding: '16px', 
-            borderRadius: 'var(--border-radius-lg)', 
-            display: 'flex', 
-            gap: '16px', 
-            justifyContent: 'center', 
-            border: '1px solid var(--color-border-tertiary)',
-            boxShadow: 'var(--shadow-md)'
-          }}>
+          <div className="video-controls">
             <Button
               type={state.isMuted ? 'primary' : 'default'}
               danger={state.isMuted}
@@ -216,7 +187,7 @@ export const PatientVideoConsultation = () => {
       </div>
 
       {/* Right Sidebar: Chat/Files/Notes */}
-      <div style={{ background: 'var(--color-background-primary)', borderRadius: 'var(--border-radius-lg)', border: '0.5px solid var(--color-border-tertiary)', overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <div className="video-sidebar-area">
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Tabs
             className="consultation-tabs"

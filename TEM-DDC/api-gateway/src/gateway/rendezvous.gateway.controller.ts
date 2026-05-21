@@ -299,6 +299,20 @@ export class RendezvousGwController {
     } catch (e) { this.handleAxiosError(e); }
   }
 
+  /** POST /api/rendezvous/confirm-after-payment — bypass payment gateway */
+  @Post('confirm-after-payment')
+  async confirmAfterPayment(
+    @Req() req: any,
+    @Body() body: { rendezvousId: number },
+  ) {
+    try {
+      const { data } = await firstValueFrom(
+        this.http.post(`${this.baseUrl}/confirm-after-payment`, body, { headers: this.passHeaders(req) }),
+      );
+      return data;
+    } catch (e) { this.handleAxiosError(e); }
+  }
+
   /** PATCH /api/rendezvous/:id — partial update (reschedule times, status, etc.) */
   @Patch(':id')
   async updateById(

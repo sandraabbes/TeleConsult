@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+/* Ensure no horizontal overflow anywhere */
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Manrope', sans-serif;
   background: #F6F8F8;
@@ -18,6 +23,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #111827;
 }
 
+/* Responsive typography */
+h1 { font-size: clamp(1.25rem, 4vw, 2rem); }
+h2 { font-size: clamp(1.1rem, 3vw, 1.5rem); }
+
 a {
   color: #1479FF;
   text-decoration: none;
@@ -25,6 +34,11 @@ a {
 
 a:hover {
   color: #0D5FCC;
+}
+
+/* Touch-friendly tap targets */
+button, .ant-btn {
+  min-height: 44px;
 }
 
 ::-webkit-scrollbar {
@@ -43,4 +57,41 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #9CA3AF;
+}
+
+/* ──────────── Ant Design Table → Mobile Card List ──────────── */
+@media (max-width: 767px) {
+  .ant-table-wrapper {
+    display: none;
+  }
+  .mobile-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-card-list {
+    display: none;
+  }
+}
+
+/* ──────────── Responsive breakpoint CSS variables ──────────── */
+:root {
+  --breakpoint-xs: 0px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-xxl: 1600px;
+
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+  --header-height: 64px;
+  --header-height-mobile: 56px;
+  --bottom-nav-height: 64px;
+
+  --color-primary: #1479FF;
+  --color-bg: #F6F8F8;
 }

@@ -239,3 +239,20 @@
   animation: spin-slow 2s linear infinite;
   display: inline-block;
 }
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .doctor-wr {
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  .doctor-wr-card {
+    padding: 24px 20px;
+  }
+  .doctor-wr-title {
+    font-size: 18px;
+  }
+  .wr-details-grid {
+    grid-template-columns: 1fr;
+  }
+}

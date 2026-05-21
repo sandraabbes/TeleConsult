@@ -15,3 +15,10 @@
   transition: color 0.2s;
   margin-bottom: 8px;
 }
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .patient-detail-page {
+    padding: 16px;
+  }
+}

@@ -1,1 +1,14 @@
-/* PatientLayout styles */
+/* ──────────── Patient Layout Responsive Styles ──────────── */
+
+/* Main content area adjustments */
+.main-layout.desktop .main-content {
+  /* Desktop: sidebar is 260px expanded */
+}
+
+.main-layout.tablet .main-content {
+  /* Tablet: sidebar is 80px collapsed */
+}
+
+.main-layout.mobile .main-content {
+  /* Mobile: no sidebar, full width */
+}

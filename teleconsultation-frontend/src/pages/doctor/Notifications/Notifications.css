@@ -89,3 +89,31 @@
   color: #9CA3AF;
 }
 
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .notifications-page {
+    padding: 16px;
+  }
+  .notifications-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .notifications-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .notifications-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .notifications-tab {
+    padding: 10px 14px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .notification-item {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+}
+

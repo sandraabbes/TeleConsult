@@ -241,3 +241,39 @@
 .auth-oauth-btn:hover {
   border-color: #1479FF;
 }
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .auth-page {
+    flex-direction: column !important;
+  }
+  .auth-left-panel {
+    display: none;
+  }
+  .auth-right-panel {
+    flex: 1;
+    width: 100%;
+  }
+  .auth-top-bar {
+    padding: 16px 20px;
+  }
+  .auth-form-area {
+    padding: 24px 20px;
+  }
+  .auth-form-container {
+    max-width: 100%;
+  }
+  .auth-title {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .auth-left-panel {
+    width: 28vw;
+    padding: 2rem;
+  }
+  .auth-form-area {
+    padding: 32px;
+  }
+}

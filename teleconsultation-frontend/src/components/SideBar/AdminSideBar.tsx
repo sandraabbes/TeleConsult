@@ -86,9 +86,10 @@ const AdminSideBar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
       style={{
         height: '100vh',
         borderRight: '1px solid #f0f0f0',
-        position: 'sticky',
+        position: 'fixed',
         top: 0,
         left: 0,
+        bottom: 0,
         zIndex: 100,
       }}
     >

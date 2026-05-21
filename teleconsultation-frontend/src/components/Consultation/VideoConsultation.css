@@ -1,0 +1,119 @@
+/* ──────────── Responsive Video Consultation Layout ──────────── */
+.video-consultation-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  height: calc(100vh - 64px); /* Subtract header height */
+  overflow: hidden;
+  box-sizing: border-box;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-background-tertiary, #F6F8F8);
+}
+
+.video-main-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.video-sidebar-area {
+  background: var(--color-background-primary, #FFFFFF);
+  border-radius: var(--border-radius-lg, 12px);
+  border: 0.5px solid var(--color-border-tertiary, #E2E8F0);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.video-consultation-header {
+  background: var(--color-background-primary, #FFFFFF);
+  padding: 16px 24px;
+  border-radius: var(--border-radius-lg, 12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--color-border-tertiary, #E2E8F0);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.08));
+  flex-shrink: 0;
+}
+
+.video-container {
+  flex: 1;
+  position: relative;
+  background: #1a1f3a;
+  border-radius: var(--border-radius-lg, 12px);
+  overflow: hidden;
+  border: 0.5px solid var(--color-border-tertiary, #E2E8F0);
+  min-height: 200px;
+}
+
+.video-controls {
+  background: var(--color-background-primary, #FFFFFF);
+  padding: 16px;
+  border-radius: var(--border-radius-lg, 12px);
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  border: 1px solid var(--color-border-tertiary, #E2E8F0);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08));
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.local-video-overlay {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 240px;
+  height: 135px;
+  background: #000;
+  border-radius: var(--border-radius-md, 8px);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.1);
+  z-index: 20;
+}
+
+/* ──────────── Mobile Responsiveness ──────────── */
+@media (max-width: 991px) {
+  .video-consultation-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: calc(100vh - 56px); /* Mobile header might be smaller */
+    overflow-y: auto;
+  }
+  
+  .video-main-area {
+    min-height: 60vh;
+  }
+
+  .video-sidebar-area {
+    min-height: 60vh;
+  }
+
+  .local-video-overlay {
+    width: 140px;
+    height: 79px;
+    bottom: 8px;
+    right: 8px;
+  }
+  
+  .video-consultation-header {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 575px) {
+  .video-controls {
+    gap: 8px;
+    padding: 12px;
+  }
+  
+  .video-controls .ant-btn-circle {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 16px !important;
+  }
+}

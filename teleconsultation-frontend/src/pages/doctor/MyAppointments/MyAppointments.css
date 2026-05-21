@@ -267,3 +267,72 @@
   color: #1479FF;
   font-weight: 600;
 }
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .appointments-page {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  .appointments-left {
+    width: 100%;
+  }
+  .appointments-right {
+    width: 100%;
+  }
+  /* Scrollable tabs */
+  .appointments-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .appointments-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .appointments-tab {
+    padding: 10px 16px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  /* Stack appointment row content */
+  .appointment-list-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .appt-detail-col {
+    min-width: 60px;
+  }
+  .upcoming-next-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .upcoming-next-card {
+    padding: 14px 16px;
+  }
+  /* Calendar compact */
+  .cal-day {
+    font-size: 11px;
+    padding: 4px 1px;
+  }
+  .right-card {
+    padding: 14px 16px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .appointments-page {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+  .appointments-right {
+    width: 100%;
+    flex-direction: row;
+  }
+  .appointments-right > .right-card {
+    flex: 1;
+  }
+}

@@ -294,3 +294,47 @@
 .ant-upload-wrapper .ant-upload-drag:hover {
   border-color: #1479FF !important;
 }
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .register-page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+  .register-left-panel {
+    display: none;
+  }
+  .register-right-panel {
+    flex: 1;
+    width: 100%;
+  }
+  .register-right-panel > div:first-child {
+    padding: 16px 20px !important;
+  }
+  .register-form-area {
+    padding: 16px 20px 32px;
+  }
+  .register-form-container {
+    max-width: 100%;
+  }
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .form-row .half {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .register-left-panel {
+    width: 28vw;
+    padding: 32px 24px;
+  }
+  .register-form-area {
+    padding: 20px 32px;
+  }
+}

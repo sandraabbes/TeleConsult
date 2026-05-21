@@ -7,6 +7,12 @@
   font-family: 'Manrope', sans-serif;
 }
 
+.stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
 .dashboard-left {
   flex: 1;
   display: flex;
@@ -191,4 +197,70 @@
 
 .notification-row:last-of-type {
   border-bottom: none;
+}
+
+/* ──────────── Mobile Responsive ──────────── */
+@media (max-width: 767px) {
+  .doctor-dashboard {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+  .dashboard-left {
+    gap: 16px;
+  }
+  .dashboard-right {
+    width: 100%;
+    flex-shrink: 1;
+    gap: 16px;
+  }
+  .doctor-dashboard h1 {
+    font-size: 18px !important;
+  }
+  /* Stat cards: single column on mobile */
+  .stat-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .doctor-dashboard .stat-card {
+    width: 100%;
+  }
+  .stat-value {
+    font-size: 22px;
+  }
+  /* Appointment rows: stack buttons below */
+  .appointment-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .appointment-row > div:last-child {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .dashboard-section {
+    padding: 14px 16px;
+  }
+  .section-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Calendar compact */
+  .calendar-day {
+    font-size: 11px;
+    padding: 4px 1px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .doctor-dashboard {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+  .dashboard-right {
+    width: 100%;
+    flex-direction: row;
+  }
+  .dashboard-right > .dashboard-section {
+    flex: 1;
+  }
 }

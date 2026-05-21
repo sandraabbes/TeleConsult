@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Input, Avatar, Spin, message as antdMessage, Tooltip } from 'antd';
-import { SearchOutlined, PaperClipOutlined, SendOutlined, FileOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Input, Avatar, Spin, message as antdMessage, Tooltip, Grid } from 'antd';
+import { SearchOutlined, PaperClipOutlined, SendOutlined, FileOutlined, DownloadOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '../../../context/AuthContext';
 import { messagesApi, type ConversationEntity, type MessageEntity } from '../../../api/messages';
 import api from '../../../api/axios';
 import './Messages.css';
+
+const { useBreakpoint } = Grid;
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ATTACHMENT_PREFIX = '::FILE::';
@@ -31,6 +33,9 @@ interface PatientInfo {
 const Messages: React.FC = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const [conversations, setConversations] = useState<ConversationEntity[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
@@ -386,10 +391,19 @@ const Messages: React.FC = () => {
   const activeConvData = conversations.find((c) => c.id === activeConversationId);
   const otherUser = activeConvData ? getOtherUser(activeConvData) : null;
 
+  const handleConversationSelect = (convId: string) => {
+    setActiveConversationId(convId);
+    if (isMobile) setShowSidebar(false);
+  };
+
+  const handleBackToSidebar = () => {
+    setShowSidebar(true);
+  };
+
   return (
     <div className="messages-container">
       {/* Sidebar Area */}
-      <div className="messages-sidebar">
+      <div className={`messages-sidebar ${isMobile && !showSidebar ? 'sidebar-hidden' : ''}`}>
         <div className="messages-sidebar-header">
           <h2>Messages</h2>
           <div ref={searchContainerRef} style={{ position: 'relative' }}>
@@ -463,7 +477,7 @@ const Messages: React.FC = () => {
                 <div
                   key={conv.id}
                   className={`conversation-item ${isActive ? 'active' : ''}`}
-                  onClick={() => setActiveConversationId(conv.id)}
+                  onClick={() => handleConversationSelect(conv.id)}
                 >
                   <div className="conversation-avatar-container">
                     <Avatar size={48} style={{ backgroundColor: '#1677ff' }}>
@@ -488,10 +502,16 @@ const Messages: React.FC = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="chat-main">
+      <div className={`chat-main ${isMobile && showSidebar ? 'chat-hidden' : ''}`}>
         {activeConversationId && otherUser ? (
           <>
             <div className="chat-header">
+              {isMobile && (
+                <ArrowLeftOutlined
+                  className="chat-back-btn"
+                  onClick={handleBackToSidebar}
+                />
+              )}
               <Avatar size={40} style={{ backgroundColor: '#1677ff' }}>
                 {otherUser.initial}
               </Avatar>
