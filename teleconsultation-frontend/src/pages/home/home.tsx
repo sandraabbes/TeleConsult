@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import {
@@ -17,6 +17,8 @@ import {
   SearchOutlined,
   CalendarOutlined,
   DesktopOutlined,
+  MenuOutlined,
+  CloseOutlined,
 } from '@ant-design/icons';
 import logo from '../../assets/images/Teleconsult.png';
 import aboutImage from '../../assets/images/La-teleconsultation-comment-ca-marche.jpg';
@@ -29,6 +31,7 @@ const Home: React.FC = () => {
   const specialtiesRef = useRef<HTMLDivElement>(null);
   const howItWorksRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -130,6 +133,30 @@ const Home: React.FC = () => {
               Login
             </Button>
             <Button type="primary" className="home-btn-register" onClick={() => navigate('/register')}>
+              Register
+            </Button>
+          </div>
+          <button
+            className="home-hamburger"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <CloseOutlined /> : <MenuOutlined />}
+          </button>
+        </div>
+        {/* Mobile Drawer */}
+        <div className={`home-mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}> 
+          <ul className="mobile-drawer-links">
+            <li onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileMenuOpen(false); }}>Home</li>
+            <li onClick={() => { scrollTo(aboutRef); setMobileMenuOpen(false); }}>About</li>
+            <li onClick={() => { scrollTo(specialtiesRef); setMobileMenuOpen(false); }}>My Plans</li>
+            <li onClick={() => { scrollTo(contactRef); setMobileMenuOpen(false); }}>Contact</li>
+          </ul>
+          <div className="mobile-drawer-actions">
+            <Button className="home-btn-login" block onClick={() => { navigate('/login'); setMobileMenuOpen(false); }}>
+              Login
+            </Button>
+            <Button type="primary" className="home-btn-register" block onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}>
               Register
             </Button>
           </div>
