@@ -198,6 +198,15 @@
   overflow: hidden;
 }
 
+/* ── Switch styling ── */
+.schedule-day-card-header .ant-switch-checked {
+  background-color: #1479FF !important;
+}
+
+.schedule-day-card-header .ant-switch-checked::after {
+  background-color: #FFFFFF !important;
+}
+
 .schedule-table-card .ant-table {
   font-family: 'Manrope', sans-serif;
 }

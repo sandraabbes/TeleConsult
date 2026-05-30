@@ -497,7 +497,6 @@ const Schedule = () => {
                   checked={cfg.enabled}
                   onChange={checked => updateDay(day.key, { enabled: checked })}
                   size="small"
-                  style={{ background: cfg.enabled ? '#1479FF' : undefined }}
                 />
               </div>
 

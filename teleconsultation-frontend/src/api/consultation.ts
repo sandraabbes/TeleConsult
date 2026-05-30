@@ -51,7 +51,9 @@ export const consultationAPI = {
 
     // Step 1: Try to find an existing medical record for this appointment
     try {
-      const existing = await axios.get(`/medical-records/rendezvous/${rendezvousId}`);
+      const existing = await axios.get(`/medical-records/rendezvous/${rendezvousId}`, {
+        _skipAuthRedirect: true,
+      } as any);
       if (existing.data && existing.data.id) {
         // Record exists — just update it with notes/diagnosis/mappedPrescriptions
         return axios.patch(`/medical-records/${existing.data.id}`, {

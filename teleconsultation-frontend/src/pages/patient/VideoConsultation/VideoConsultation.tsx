@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Tabs, Button, Modal, Badge, Spin } from 'antd';
 import { 
@@ -56,6 +56,18 @@ export const PatientVideoConsultation = () => {
       },
     });
   };
+
+  // When the consultation is ended by the doctor (via socket event),
+  // automatically navigate the patient to the consultation detail page
+  useEffect(() => {
+    if (state.status === 'COMPLETED') {
+      // Small delay so the user sees the state change before navigating
+      const timer = setTimeout(() => {
+        navigate(`/patient/consultations/${appointmentId}`);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [state.status, appointmentId, navigate]);
 
   if (state.status === 'WAITING') {
     return (
