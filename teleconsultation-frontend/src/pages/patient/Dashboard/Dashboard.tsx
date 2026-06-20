@@ -115,8 +115,8 @@ export default function Dashboard() {
     (a) => {
       const s = (a.status || '').toUpperCase();
       return (
-        (s === 'PENDING' || s === 'SCHEDULED' || s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION') &&
-        dayjs(a.endTime || a.startTime).isAfter(dayjs())
+        ((s === 'PENDING' || s === 'SCHEDULED' || s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION') &&
+        dayjs(a.endTime || a.startTime).isAfter(dayjs())) || s === 'IN_CONSULTATION'
       );
     }
   ).slice(0, 4); // show top 4 upcoming
@@ -200,31 +200,33 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div>
-                      {(appt.status || '').toUpperCase() === 'CONFIRMED' || (appt.status || '').toUpperCase() === 'AWAITING_CONSULTATION' ? (
+                      {(appt.status || '').toUpperCase() === 'CONFIRMED' || (appt.status || '').toUpperCase() === 'AWAITING_CONSULTATION' || (appt.status || '').toUpperCase() === 'IN_CONSULTATION' ? (
                         (() => {
+                          const status = (appt.status || '').toUpperCase();
                           const minutesUntil = dayjs(appt.startTime).diff(dayjs(), 'minute');
                           const isWithin15Min = minutesUntil <= 15 && minutesUntil >= -60;
+                          const isJoinEnabled = isWithin15Min || status === 'IN_CONSULTATION';
                           const isDoctorReady = appt.doctorInWaitingRoom === true;
                           
                           return (
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-                              {isDoctorReady && (
+                              {isDoctorReady && status !== 'IN_CONSULTATION' && (
                                 <span style={{ fontSize: 10, fontWeight: 700, color: '#16A34A', background: '#DCFCE7', padding: '2px 8px', borderRadius: 10, whiteSpace: 'nowrap' }}>
                                   Doctor is ready!
                                 </span>
                               )}
                               <Button 
                                 className="action-btn-primary" 
-                                disabled={!isWithin15Min}
+                                disabled={!isJoinEnabled}
                                 onClick={() => navigate(`/patient/waiting-room/${appt.id}`)}
                                 style={{
-                                  background: isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0',
-                                  color: isWithin15Min ? '#fff' : '#94A3B8',
-                                  borderColor: isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0',
-                                  opacity: isWithin15Min ? 1 : 0.6,
+                                  background: status === 'IN_CONSULTATION' ? '#22C55E' : (isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0'),
+                                  color: isJoinEnabled ? '#fff' : '#94A3B8',
+                                  borderColor: status === 'IN_CONSULTATION' ? '#22C55E' : (isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0'),
+                                  opacity: isJoinEnabled ? 1 : 0.6,
                                 }}
                               >
-                                {isWithin15Min ? 'Join Meeting' : startDayjs.format('hh:mm A')}
+                                {status === 'IN_CONSULTATION' ? 'Rejoin Meeting' : (isWithin15Min ? 'Join Meeting' : startDayjs.format('hh:mm A'))}
                               </Button>
                             </div>
                           );

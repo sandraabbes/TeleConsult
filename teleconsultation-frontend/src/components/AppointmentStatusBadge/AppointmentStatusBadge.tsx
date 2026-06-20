@@ -12,7 +12,7 @@ export function normalizeAppointmentStatusTone(raw: string | null | undefined): 
   if (s === 'CANCELLED' || s === 'CANCELED') return 'CANCELLED'
   if (s === 'COMPLETED') return 'COMPLETED'
   if (s === 'NO_SHOW' || s === 'NOSHOW') return 'NOSHOW'
-  if (s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION') return 'CONFIRMED'
+  if (s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION') return 'CONFIRMED'
   if (s === 'RESCHEDULE_REQUESTED') return 'RESCHEDULE_REQUESTED'
   return 'PENDING'
 }
@@ -30,6 +30,7 @@ export function getAppointmentStatusLabel(raw: string | null | undefined): strin
   if (tone !== 'PENDING') return labels[tone]
 
   const s = String(raw || '').trim().toUpperCase()
+  if (s === 'IN_CONSULTATION') return 'In Consultation'
   if (s === 'SCHEDULED' || s === 'PENDING_PAYMENT') return 'Payment required'
   if (s === 'PENDING') return 'Awaiting approval'
   if (s === 'RESCHEDULED') return 'Rescheduled'

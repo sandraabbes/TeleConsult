@@ -285,14 +285,14 @@ export default function MyAppointments() {
 
   const upcomingAppts = appointments.filter(a => {
     const s = (a.status || '').toUpperCase()
-    return (s === 'PENDING' || s === 'SCHEDULED' || s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION')
-      && dayjs(a.endTime || a.startTime).isAfter(now)
+    return ((s === 'PENDING' || s === 'SCHEDULED' || s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION')
+      && dayjs(a.endTime || a.startTime).isAfter(now)) || s === 'IN_CONSULTATION'
   })
 
   const pastAppts = appointments.filter(a => {
     const s = (a.status || '').toUpperCase()
     return s === 'COMPLETED' || s === 'CANCELLED' || s === 'NO_SHOW' || s === 'NOSHOW'
-      || (dayjs(a.endTime || a.startTime).isBefore(now) && s !== 'RESCHEDULE_REQUESTED')
+      || (dayjs(a.endTime || a.startTime).isBefore(now) && s !== 'RESCHEDULE_REQUESTED' && s !== 'IN_CONSULTATION')
   }).sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
 
   const displayAppts = activeTab === 'upcoming' ? upcomingAppts
@@ -414,10 +414,12 @@ export default function MyAppointments() {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  {(nextAppt.status === 'CONFIRMED' || nextAppt.status === 'AWAITING_CONSULTATION') && (
+                  {(nextAppt.status === 'CONFIRMED' || nextAppt.status === 'AWAITING_CONSULTATION' || nextAppt.status === 'IN_CONSULTATION') && (
                     <Button className="pat-join-btn" icon={<VideoCameraOutlined />}
-                      onClick={() => navigate(`/patient/waiting-room/${nextAppt.id}`)}>
-                      Join
+                      onClick={() => navigate(`/patient/waiting-room/${nextAppt.id}`)}
+                      style={{ background: nextAppt.status === 'IN_CONSULTATION' ? '#22C55E' : undefined, borderColor: nextAppt.status === 'IN_CONSULTATION' ? '#22C55E' : undefined }}
+                    >
+                      {nextAppt.status === 'IN_CONSULTATION' ? 'Rejoin' : 'Join'}
                     </Button>
                   )}
                   {nextAppt.status === 'SCHEDULED' && (
@@ -451,7 +453,7 @@ export default function MyAppointments() {
                   const doc = getDoctorDetails(appt.medecinId)
                   const displayName = doc.name.startsWith('Dr.') ? doc.name : `Dr. ${doc.name}`
                   const status = (appt.status || '').toUpperCase()
-                  const canJoin = status === 'CONFIRMED' || status === 'AWAITING_CONSULTATION'
+                  const canJoin = status === 'CONFIRMED' || status === 'AWAITING_CONSULTATION' || status === 'IN_CONSULTATION'
                   const minutesUntil = dayjs(appt.startTime).diff(dayjs(), 'minute')
                   const isWithin15Min = minutesUntil <= 15 && minutesUntil >= -60
                   const isDoctorReady = appt.doctorInWaitingRoom === true
@@ -503,7 +505,7 @@ export default function MyAppointments() {
 
                         {canJoin && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            {isDoctorReady && (
+                            {isDoctorReady && status !== 'IN_CONSULTATION' && (
                               <span style={{ fontSize: 10, fontWeight: 700, color: '#16A34A', background: '#DCFCE7', padding: '2px 8px', borderRadius: 10, whiteSpace: 'nowrap' }}>
                                 Doctor is ready!
                               </span>
@@ -512,16 +514,16 @@ export default function MyAppointments() {
                               className="pat-join-btn"
                               icon={<VideoCameraOutlined />}
                               size="small"
-                              disabled={!isWithin15Min}
+                              disabled={!(isWithin15Min || status === 'IN_CONSULTATION')}
                               onClick={() => navigate(`/patient/waiting-room/${appt.id}`)}
                               style={{
-                                background: isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0',
-                                color: isWithin15Min ? '#fff' : '#94A3B8',
+                                background: status === 'IN_CONSULTATION' ? '#22C55E' : (isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0'),
+                                color: (isWithin15Min || status === 'IN_CONSULTATION') ? '#fff' : '#94A3B8',
                                 border: 'none',
-                                opacity: isWithin15Min ? 1 : 0.6,
+                                opacity: (isWithin15Min || status === 'IN_CONSULTATION') ? 1 : 0.6,
                               }}
                             >
-                              {isWithin15Min ? 'Join' : dayjs(appt.startTime).format('hh:mm A')}
+                              {status === 'IN_CONSULTATION' ? 'Rejoin' : (isWithin15Min ? 'Join' : dayjs(appt.startTime).format('hh:mm A'))}
                             </Button>
                           </div>
                         )}

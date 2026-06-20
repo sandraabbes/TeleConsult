@@ -213,7 +213,7 @@ export default function MyAppointments() {
       case 'confirmed':
         filtered = filtered.filter(a =>
           a.status === 'CONFIRMED' || a.status === 'confirmed' ||
-          a.status === 'AWAITING_CONSULTATION'
+          a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
         )
         break
       case 'reschedule':
@@ -225,7 +225,7 @@ export default function MyAppointments() {
         filtered = filtered.filter(a =>
           a.status === 'COMPLETED' || a.status === 'CANCELLED' ||
           a.status === 'cancelled' || a.status === 'completed' ||
-          dayjs(a.startTime).isBefore(dayjs(), 'day')
+          (dayjs(a.startTime).isBefore(dayjs(), 'day') && a.status !== 'IN_CONSULTATION')
         )
         break
       default:
@@ -243,7 +243,7 @@ export default function MyAppointments() {
 
   const confirmedCount = appointments.filter(a =>
     a.status === 'CONFIRMED' || a.status === 'confirmed' ||
-    a.status === 'AWAITING_CONSULTATION'
+    a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
   ).length
 
   const rescheduleCount = appointments.filter(a =>
@@ -253,9 +253,9 @@ export default function MyAppointments() {
   const upcomingNext = appointments.find(a => {
     const start = dayjs(a.startTime)
     const now = dayjs()
-    const isConfirmed = a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION'
+    const isConfirmed = a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
     const isWithin30Min = start.diff(now, 'minute') <= 30 && start.diff(now, 'minute') >= -60
-    return isConfirmed && isWithin30Min
+    return isConfirmed && (isWithin30Min || a.status === 'IN_CONSULTATION')
   })
 
   const groupAppointmentsByDate = (appts: any[]) => {
@@ -434,7 +434,7 @@ export default function MyAppointments() {
   ).length
   const todayUpcoming = todayAppts.filter(a =>
     a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION' ||
-    a.status === 'SCHEDULED'
+    a.status === 'SCHEDULED' || a.status === 'IN_CONSULTATION'
   ).length
 
   // Calendar days calculation
@@ -521,12 +521,13 @@ export default function MyAppointments() {
                 </div>
               </div>
               {(() => {
-                const isConfirmed = upcomingNext.status === 'CONFIRMED' || upcomingNext.status === 'AWAITING_CONSULTATION';
-                const canJoin = isWithin15Minutes(upcomingNext.startTime);
+                const isConfirmed = upcomingNext.status === 'CONFIRMED' || upcomingNext.status === 'AWAITING_CONSULTATION' || upcomingNext.status === 'IN_CONSULTATION';
+                const isRejoin = upcomingNext.status === 'IN_CONSULTATION';
+                const canJoin = isWithin15Minutes(upcomingNext.startTime) || isRejoin;
                 const timeStatus = getTimeStatus(upcomingNext.startTime);
                 
                 return (
-                  <Tooltip title={isConfirmed ? (canJoin ? 'Enter waiting room now' : timeStatus) : 'Waiting for payment'}>
+                  <Tooltip title={isConfirmed ? (canJoin ? (isRejoin ? 'Rejoin consultation' : 'Enter waiting room now') : timeStatus) : 'Waiting for payment'}>
                     <Button
                       type={canJoin ? 'primary' : 'default'}
                       icon={<PhoneOutlined />}
@@ -534,8 +535,8 @@ export default function MyAppointments() {
                       loading={readyingId === upcomingNext.id}
                       disabled={!canJoin || !isConfirmed}
                       style={{
-                        background: (canJoin && isConfirmed) ? '#1479FF' : undefined,
-                        borderColor: (canJoin && isConfirmed) ? '#1479FF' : undefined,
+                        background: (canJoin && isConfirmed) ? (isRejoin ? '#22C55E' : '#1479FF') : undefined,
+                        borderColor: (canJoin && isConfirmed) ? (isRejoin ? '#22C55E' : '#1479FF') : undefined,
                         borderRadius: 10,
                         fontWeight: 700,
                         height: 44,
@@ -546,7 +547,7 @@ export default function MyAppointments() {
                         gap: 6
                       }}
                     >
-                      {isConfirmed ? (canJoin ? "I'M READY" : "START CALL") : "AWAITING PAYMENT"}
+                      {isConfirmed ? (isRejoin ? "REJOIN CALL" : (canJoin ? "I'M READY" : "START CALL")) : "AWAITING PAYMENT"}
                     </Button>
                   </Tooltip>
                 );
@@ -646,13 +647,14 @@ export default function MyAppointments() {
                         </Button>
                       </div>
                     )}
-                    {(appt.status === 'CONFIRMED' || appt.status === 'confirmed' || appt.status === 'AWAITING_CONSULTATION') && (
+                    {(appt.status === 'CONFIRMED' || appt.status === 'confirmed' || appt.status === 'AWAITING_CONSULTATION' || appt.status === 'IN_CONSULTATION') && (
                       <div style={{ display: 'flex', gap: 8 }}>
                         {(() => {
-                          const canJoin = isWithin15Minutes(appt.startTime);
+                          const isRejoin = appt.status === 'IN_CONSULTATION';
+                          const canJoin = isWithin15Minutes(appt.startTime) || isRejoin;
                           const timeStatus = getTimeStatus(appt.startTime);
                           return (
-                            <Tooltip title={canJoin ? 'Enter waiting room now' : timeStatus}>
+                            <Tooltip title={isRejoin ? 'Rejoin consultation' : (canJoin ? 'Enter waiting room now' : timeStatus)}>
                               <Button
                                 type={canJoin ? 'primary' : 'default'}
                                 onClick={() => handleDoctorReady(appt.id)}
@@ -669,7 +671,7 @@ export default function MyAppointments() {
                                   borderStyle: canJoin ? 'none' : 'solid'
                                 }}
                               >
-                                I'm Ready
+                                {isRejoin ? "Rejoin" : "I'm Ready"}
                               </Button>
                             </Tooltip>
                           );
