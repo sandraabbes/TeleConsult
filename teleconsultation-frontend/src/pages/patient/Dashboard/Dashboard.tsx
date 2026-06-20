@@ -31,15 +31,29 @@ export default function Dashboard() {
   const handlePayment = async (appointmentId: number) => {
     setPaymentLoading(appointmentId);
     try {
-      // Bypass payment gateway for now
+      // Step 1: Immediately confirm the appointment (bypass Konnect verification)
       await api.post(`/rendezvous/confirm-after-payment`, { rendezvousId: appointmentId });
       setAppointments(prev =>
         prev.map(a => a.id === appointmentId ? { ...a, status: 'CONFIRMED' } : a)
       );
-      message.success('Payment successful. Appointment confirmed!');
+      message.success('Appointment confirmed! Opening payment page...');
+
+      // Step 2: Try to open Konnect payment in a new tab (non-blocking)
+      try {
+        const payRes = await api.get(`/payments/rendezvous/${appointmentId}`);
+        if (payRes?.data?.id) {
+          const { data } = await api.post(`/payments/${payRes.data.id}/initiate`, {});
+          if (data?.payUrl) {
+            window.open(data.payUrl, '_blank', 'noopener,noreferrer');
+          }
+        }
+      } catch (payErr) {
+        console.warn('Konnect payment initiation skipped (non-blocking):', payErr);
+        // Appointment is already confirmed — payment stays PENDING
+      }
     } catch (error) {
-      console.error('Payment bypass failed', error);
-      message.error('Payment failed');
+      console.error('Appointment confirmation failed', error);
+      message.error('Failed to confirm appointment');
     } finally {
       setPaymentLoading(null);
     }

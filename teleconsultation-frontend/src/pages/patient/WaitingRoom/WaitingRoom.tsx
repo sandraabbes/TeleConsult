@@ -107,15 +107,29 @@ export const PatientWaitingRoom = () => {
   }, [appointmentId, patientId, appointment?.status]);
 
   const handlePayment = async () => {
-    if (!payment?.id) return;
     try {
-      const { data } = await api.post(`/payments/${payment.id}/initiate`, {});
-      if (data?.payUrl) {
-        window.location.href = data.payUrl;
+      // Step 1: Immediately confirm the appointment (bypass Konnect verification)
+      await api.post(`/rendezvous/confirm-after-payment`, { rendezvousId: Number(appointmentId) });
+      message.success('Appointment confirmed! Opening payment page...');
+
+      // Refresh appointment data so UI shows CONFIRMED status
+      await fetchDetails();
+
+      // Step 2: Try to open Konnect payment in a new tab (non-blocking)
+      if (payment?.id) {
+        try {
+          const { data } = await api.post(`/payments/${payment.id}/initiate`, {});
+          if (data?.payUrl) {
+            window.open(data.payUrl, '_blank', 'noopener,noreferrer');
+          }
+        } catch (payErr) {
+          console.warn('Konnect payment initiation skipped (non-blocking):', payErr);
+          // Appointment is already confirmed — payment stays PENDING
+        }
       }
     } catch (error) {
-      console.error('Payment initiation failed', error);
-      message.error('Payment initiation failed. Please try again.');
+      console.error('Appointment confirmation failed', error);
+      message.error('Failed to confirm appointment. Please try again.');
     }
   };
 
