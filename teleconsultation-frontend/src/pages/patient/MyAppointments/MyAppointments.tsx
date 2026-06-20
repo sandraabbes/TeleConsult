@@ -414,15 +414,31 @@ export default function MyAppointments() {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  {(nextAppt.status === 'CONFIRMED' || nextAppt.status === 'AWAITING_CONSULTATION' || nextAppt.status === 'IN_CONSULTATION') && (
-                    <Button className="pat-join-btn" icon={<VideoCameraOutlined />}
-                      onClick={() => navigate(`/patient/waiting-room/${nextAppt.id}`)}
-                      style={{ background: nextAppt.status === 'IN_CONSULTATION' ? '#22C55E' : undefined, borderColor: nextAppt.status === 'IN_CONSULTATION' ? '#22C55E' : undefined }}
-                    >
-                      {nextAppt.status === 'IN_CONSULTATION' ? 'Rejoin' : 'Join'}
-                    </Button>
-                  )}
-                  {nextAppt.status === 'SCHEDULED' && (
+                  {(() => {
+                    const s = (nextAppt.status || '').toUpperCase();
+                    if (s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION') {
+                      const minutesUntil = dayjs(nextAppt.startTime).diff(dayjs(), 'minute');
+                      const isWithin15Min = minutesUntil <= 15 && minutesUntil >= -60;
+                      const isDoctorReady = nextAppt.doctorInWaitingRoom === true;
+
+                      return (
+                        <Button className="pat-join-btn" icon={<VideoCameraOutlined />}
+                          disabled={!(isWithin15Min || s === 'IN_CONSULTATION')}
+                          onClick={() => navigate(`/patient/waiting-room/${nextAppt.id}`)}
+                          style={{
+                            background: s === 'IN_CONSULTATION' ? '#22C55E' : (isDoctorReady && isWithin15Min ? '#22C55E' : isWithin15Min ? '#1479FF' : '#E2E8F0'),
+                            color: (isWithin15Min || s === 'IN_CONSULTATION') ? '#fff' : '#94A3B8',
+                            border: 'none',
+                            opacity: (isWithin15Min || s === 'IN_CONSULTATION') ? 1 : 0.6,
+                          }}
+                        >
+                          {s === 'IN_CONSULTATION' ? 'Rejoin' : (isWithin15Min ? 'Join' : dayjs(nextAppt.startTime).format('hh:mm A'))}
+                        </Button>
+                      )
+                    }
+                    return null;
+                  })()}
+                  {((nextAppt.status || '').toUpperCase() === 'SCHEDULED') && (
                     <Button 
                       className="pat-join-btn" 
                       style={{ background: '#F59E0B', color: 'white', border: 'none' }}

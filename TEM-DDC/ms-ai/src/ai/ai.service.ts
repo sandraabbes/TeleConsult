@@ -66,14 +66,15 @@ Medical history summary:`;
       });
 
       if (!response.ok) {
-        throw new Error(`Ollama API error: ${response.statusText}`);
+        const errorText = await response.text();
+        throw new Error(`Ollama API error: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const data: any = await response.json();
       return { summary: data.response };
     } catch (error: any) {
       this.logger.error(`Ollama request failed: ${error.message}`);
-      throw error;
+      return { summary: "Erreur lors de la génération du résumé." };
     }
   }
 
@@ -123,7 +124,8 @@ JSON:`;
       });
 
       if (!response.ok) {
-        throw new Error(`Ollama API error: ${response.statusText}`);
+        const errorText = await response.text();
+        throw new Error(`Ollama API error: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const data: any = await response.json();
@@ -154,7 +156,12 @@ JSON:`;
       };
     } catch (error: any) {
       this.logger.error(`Ollama request failed: ${error.message}`);
-      throw error;
+      return {
+        textCondition: 'AI summary could not be generated due to an error.',
+        textSymptoms: record.notes || 'No symptoms recorded.',
+        textDiagnosis: record.diagnosis || 'No diagnosis recorded.',
+        textTreatment: formattedPrescriptions !== 'None' ? formattedPrescriptions : 'No treatment plan recorded.',
+      };
     }
   }
 }

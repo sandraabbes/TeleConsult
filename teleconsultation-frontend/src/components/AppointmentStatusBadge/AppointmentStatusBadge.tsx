@@ -27,6 +27,9 @@ export function getAppointmentStatusLabel(raw: string | null | undefined): strin
     PENDING: 'Pending',
     RESCHEDULE_REQUESTED: 'Reschedule Requested',
   }
+
+
+
   if (tone !== 'PENDING') return labels[tone]
 
   const s = String(raw || '').trim().toUpperCase()

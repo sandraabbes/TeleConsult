@@ -193,9 +193,9 @@ export default function Dashboard() {
                         getInitials(displayName)
                       )}
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <p className="row-title">{doc.name.startsWith('Dr. ') ? doc.name : `Dr. ${doc.name}`}</p>
-                      <p className="row-meta">
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="row-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name.startsWith('Dr. ') ? doc.name : `Dr. ${doc.name}`}</p>
+                      <p className="row-meta" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {doc.specialty} • {startDayjs.format('MMM DD')} at {startDayjs.format('hh:mm A')}
                       </p>
                     </div>
@@ -280,9 +280,9 @@ export default function Dashboard() {
                     <div className="record-icon">
                       <FileTextOutlined style={{ fontSize: 16 }} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <p className="row-title">{record.diagnosis || 'Medical Record'}</p>
-                      <p className="row-meta">{subtitle}</p>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="row-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{record.diagnosis || 'Medical Record'}</p>
+                      <p className="row-meta" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{subtitle}</p>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <p className="row-meta" style={{ marginBottom: 4 }}>{dateStr}</p>

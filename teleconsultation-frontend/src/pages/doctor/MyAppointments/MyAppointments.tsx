@@ -211,10 +211,10 @@ export default function MyAppointments() {
         )
         break
       case 'confirmed':
-        filtered = filtered.filter(a =>
-          a.status === 'CONFIRMED' || a.status === 'confirmed' ||
-          a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
-        )
+        filtered = filtered.filter(a => {
+          const s = (a.status || '').toUpperCase();
+          return s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION'
+        })
         break
       case 'reschedule':
         filtered = filtered.filter(a =>
@@ -222,11 +222,11 @@ export default function MyAppointments() {
         )
         break
       case 'past':
-        filtered = filtered.filter(a =>
-          a.status === 'COMPLETED' || a.status === 'CANCELLED' ||
-          a.status === 'cancelled' || a.status === 'completed' ||
-          (dayjs(a.startTime).isBefore(dayjs(), 'day') && a.status !== 'IN_CONSULTATION')
-        )
+        filtered = filtered.filter(a => {
+          const s = (a.status || '').toUpperCase();
+          return s === 'COMPLETED' || s === 'CANCELLED' || s === 'NO_SHOW' || s === 'NOSHOW' ||
+            (dayjs(a.startTime).isBefore(dayjs(), 'day') && s !== 'IN_CONSULTATION')
+        })
         break
       default:
         break
@@ -241,10 +241,10 @@ export default function MyAppointments() {
     a.status === 'PENDING' || a.status === 'pending'
   ).length
 
-  const confirmedCount = appointments.filter(a =>
-    a.status === 'CONFIRMED' || a.status === 'confirmed' ||
-    a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
-  ).length
+  const confirmedCount = appointments.filter(a => {
+    const s = (a.status || '').toUpperCase();
+    return s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION'
+  }).length
 
   const rescheduleCount = appointments.filter(a =>
     (a.status || '').toLowerCase() === 'reschedule_requested'
@@ -253,9 +253,10 @@ export default function MyAppointments() {
   const upcomingNext = appointments.find(a => {
     const start = dayjs(a.startTime)
     const now = dayjs()
-    const isConfirmed = a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION' || a.status === 'IN_CONSULTATION'
+    const s = (a.status || '').toUpperCase();
+    const isConfirmed = s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION'
     const isWithin30Min = start.diff(now, 'minute') <= 30 && start.diff(now, 'minute') >= -60
-    return isConfirmed && (isWithin30Min || a.status === 'IN_CONSULTATION')
+    return isConfirmed && (isWithin30Min || s === 'IN_CONSULTATION')
   })
 
   const groupAppointmentsByDate = (appts: any[]) => {
@@ -432,10 +433,10 @@ export default function MyAppointments() {
   const todayCompleted = todayAppts.filter(a =>
     a.status === 'COMPLETED' || a.status === 'completed'
   ).length
-  const todayUpcoming = todayAppts.filter(a =>
-    a.status === 'CONFIRMED' || a.status === 'AWAITING_CONSULTATION' ||
-    a.status === 'SCHEDULED' || a.status === 'IN_CONSULTATION'
-  ).length
+  const todayUpcoming = todayAppts.filter(a => {
+    const s = (a.status || '').toUpperCase();
+    return s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'SCHEDULED' || s === 'IN_CONSULTATION'
+  }).length
 
   // Calendar days calculation
   const firstDayOfMonth = calendarMonth.day()
@@ -521,8 +522,9 @@ export default function MyAppointments() {
                 </div>
               </div>
               {(() => {
-                const isConfirmed = upcomingNext.status === 'CONFIRMED' || upcomingNext.status === 'AWAITING_CONSULTATION' || upcomingNext.status === 'IN_CONSULTATION';
-                const isRejoin = upcomingNext.status === 'IN_CONSULTATION';
+                const s = (upcomingNext.status || '').toUpperCase();
+                const isConfirmed = s === 'CONFIRMED' || s === 'AWAITING_CONSULTATION' || s === 'IN_CONSULTATION';
+                const isRejoin = s === 'IN_CONSULTATION';
                 const canJoin = isWithin15Minutes(upcomingNext.startTime) || isRejoin;
                 const timeStatus = getTimeStatus(upcomingNext.startTime);
                 
@@ -647,10 +649,13 @@ export default function MyAppointments() {
                         </Button>
                       </div>
                     )}
-                    {(appt.status === 'CONFIRMED' || appt.status === 'confirmed' || appt.status === 'AWAITING_CONSULTATION' || appt.status === 'IN_CONSULTATION') && (
+                    {(() => {
+                      const s = (appt.status || '').toUpperCase();
+                      if (s !== 'CONFIRMED' && s !== 'AWAITING_CONSULTATION' && s !== 'IN_CONSULTATION') return null;
+                      return (
                       <div style={{ display: 'flex', gap: 8 }}>
                         {(() => {
-                          const isRejoin = appt.status === 'IN_CONSULTATION';
+                          const isRejoin = s === 'IN_CONSULTATION';
                           const canJoin = isWithin15Minutes(appt.startTime) || isRejoin;
                           const timeStatus = getTimeStatus(appt.startTime);
                           return (
@@ -677,7 +682,8 @@ export default function MyAppointments() {
                           );
                         })()}
                       </div>
-                    )}
+                      )
+                    })()}
                     {(appt.status || '').toLowerCase() === 'reschedule_requested' && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <span style={{ fontSize: 11, color: '#F97316', fontWeight: 600, whiteSpace: 'nowrap' }}>
