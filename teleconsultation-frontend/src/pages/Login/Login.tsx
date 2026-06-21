@@ -37,7 +37,7 @@ const Login: React.FC = () => {
           firstName: data.user.firstName,
           lastName: data.user.lastName,
           userType: 'PATIENT'
-        });
+        }, data.refreshToken);
         message.success(`Welcome back, ${data.user.firstName}!`);
         navigate('/patient/dashboard');
       } else if (data.userId || data.codeSent) {
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
           specialty: data.doctor.specialty,
           avatarUrl: data.doctor.profilePhotoUrl || undefined,
           userType: 'DOCTOR'
-        });
+        }, data.refreshToken);
         message.success(`Welcome back, ${data.doctor.fullName}!`);
         navigate('/doctor/dashboard');
       } else if (data.codeSent) {

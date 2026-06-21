@@ -17,7 +17,7 @@ interface AuthContextType {
   token: string | null
   userType: 'PATIENT' | 'DOCTOR' | null
   isAuthenticated: boolean
-  login: (token: string, user: User) => void
+  login: (token: string, user: User, refreshToken?: string) => void
   logout: () => void
   updateUser: (user: Partial<User>) => void
 }
@@ -37,8 +37,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  const login = (token: string, user: User) => {
+  const login = (token: string, user: User, refreshToken?: string) => {
     localStorage.setItem(config.TOKEN_KEY, token)
+    if (refreshToken) {
+      localStorage.setItem(config.REFRESH_TOKEN_KEY, refreshToken)
+    }
     localStorage.setItem(config.USER_KEY, JSON.stringify(user))
     setToken(token)
     setUser(user)
@@ -46,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem(config.TOKEN_KEY)
+    localStorage.removeItem(config.REFRESH_TOKEN_KEY)
     localStorage.removeItem(config.USER_KEY)
     setToken(null)
     setUser(null)

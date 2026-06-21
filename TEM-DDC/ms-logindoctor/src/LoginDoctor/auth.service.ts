@@ -219,6 +219,37 @@ async generateTokens(doctor: Partial<Doctor>) {
     return { message: 'Un nouveau code a été envoyé par email.' };
   }
 
+  /** ========== REFRESH TOKEN ========== */
+  async refreshAccessToken(refreshToken: string) {
+    const fs = require('fs');
+    const jwt = require('jsonwebtoken');
+
+    const publicKey = fs.readFileSync('keys/public.pem', 'utf8');
+
+    let payload: any;
+    try {
+      payload = jwt.verify(refreshToken, publicKey, {
+        algorithms: ['RS256'],
+        issuer: 'https://auth.doctor.svc',
+        audience: 'gateway',
+      });
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    const doctor = await this.doctorRepository.findOne({ where: { id: payload.sub } });
+    if (!doctor) {
+      throw new UnauthorizedException('Doctor not found');
+    }
+
+    const tokens = await this.generateTokens(doctor);
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      doctor: this.sanitizeDoctor(doctor),
+    };
+  }
+
   /** ========== LOGOUT ========== */
   async logout(doctorId: number) {
     const doctor = await this.doctorRepository.findOne({ where: { id: doctorId } });

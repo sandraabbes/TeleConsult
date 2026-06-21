@@ -166,6 +166,42 @@ export class AuthController {
     }
   }
 
+  /** ========== REFRESH TOKEN ========== */
+  @Post('refresh')
+  @HttpCode(200)
+  async refresh(@Body('refreshToken') refreshToken: string, @Res() res: Response) {
+    try {
+      this.logger.log('🔄 Token refresh requested');
+
+      if (!refreshToken) {
+        throw new HttpException('Refresh token is required', HttpStatus.BAD_REQUEST);
+      }
+
+      const result = await this.authService.refreshAccessToken(refreshToken);
+
+      this.logger.log('✅ Token refreshed successfully');
+
+      return res.status(200).json({
+        statusCode: 200,
+        message: 'Token refreshed successfully',
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        doctor: result.doctor,
+      });
+    } catch (error) {
+      this.logger.error(`❌ Token refresh failed: ${error.message}`);
+      const statusCode = error.status || HttpStatus.UNAUTHORIZED;
+      throw new HttpException(
+        {
+          statusCode,
+          message: error.message || 'Token refresh failed',
+          error: error.name || 'UnauthorizedException',
+        },
+        statusCode,
+      );
+    }
+  }
+
   /** ========== LOGOUT ========== */
   @Post('logout')
   @HttpCode(200)

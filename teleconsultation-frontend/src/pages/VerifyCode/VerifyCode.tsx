@@ -113,7 +113,7 @@ const VerifyCode: React.FC = () => {
           fullName: data.doctor.fullName,
           specialty: data.doctor.specialty,
           userType: 'DOCTOR'
-        });
+        }, data.refreshToken);
         localStorage.removeItem('pending_email');
         localStorage.removeItem('pending_userType');
         message.success('Verified successfully!');

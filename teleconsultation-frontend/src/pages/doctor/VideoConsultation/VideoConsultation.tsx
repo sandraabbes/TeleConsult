@@ -78,7 +78,7 @@ export const DoctorVideoConsultation = () => {
           const success = await controls.endConsultation();
           setEnding(false);
           if (success) {
-            navigate(`/doctor/consultations/${appointmentId}`);
+            navigate(`/doctor/consultations/${appointmentId}`, { replace: true });
           }
         } catch(e) {
           setEnding(false);

@@ -287,6 +287,66 @@ export class GatewayLoginDoctorController {
     }
   }
 
+  /** ========== REFRESH TOKEN ========== */
+  @Post('refresh')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Refresh doctor access token',
+    description: 'Use a valid refresh token to get new access and refresh tokens',
+  })
+  async refresh(@Body('refreshToken') refreshToken: string, @Res() res: Response) {
+    try {
+      this.logger.log('🔄 Doctor token refresh requested');
+
+      if (!refreshToken) {
+        throw new HttpException('Refresh token is required', HttpStatus.BAD_REQUEST);
+      }
+
+      const axiosResponse = await firstValueFrom(
+        this.httpService.post(`${this.authDoctorServiceUrl}/auth/refresh`, { refreshToken }),
+      );
+
+      const data = axiosResponse.data;
+      this.logger.log('✅ Doctor token refreshed successfully');
+
+      // Set new cookies
+      if (data.accessToken && data.refreshToken) {
+        if (process.env.NODE_ENV === 'production') {
+          res.cookie('accessToken', data.accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 1000 * 60 * 15,
+          });
+          res.cookie('refreshToken', data.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
+        } else {
+          res.cookie('accessToken', data.accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 15,
+          });
+          res.cookie('refreshToken', data.refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
+        }
+      }
+
+      return res.status(200).json(data);
+    } catch (error) {
+      this.logger.error(`❌ Token refresh failed: ${error.message}`);
+      this.handleError(error, 'Token refresh failed', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
   /** ========== LOGOUT DOCTOR ========== */
   @Post('logout')
   @UseGuards(JwtDoctorGuard)

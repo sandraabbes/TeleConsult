@@ -51,7 +51,7 @@ export const PatientVideoConsultation = () => {
         const success = await controls.endConsultation();
         setEnding(false);
         if (success) {
-          navigate(`/patient/consultations/${appointmentId}`);
+          navigate(`/patient/consultations/${appointmentId}`, { replace: true });
         }
       },
     });
@@ -61,10 +61,10 @@ export const PatientVideoConsultation = () => {
   // automatically navigate the patient to the consultation detail page
   useEffect(() => {
     if (state.status === 'COMPLETED') {
-      // Small delay so the user sees the state change before navigating
+      message.info('The doctor has ended the consultation.');
       const timer = setTimeout(() => {
-        navigate(`/patient/consultations/${appointmentId}`);
-      }, 1500);
+        navigate(`/patient/consultations/${appointmentId}`, { replace: true });
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [state.status, appointmentId, navigate]);
