@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+.dist/
+dist/
+build/
+**/dist/
+**/build/
+.coverage/
+coverage/
+**/coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+**/!.env.example
+
+# Private keys and certificates
+*.pem
+*.key
+*.crt
+*.csr
+*.cer
+*.p12
+*.pfx
+**/*.pem
+**/*.key
+**/*.crt
+**/*.csr
+**/*.cer
+**/*.p12
+**/*.pfx
+
+# Uploads and generated runtime files
+uploads/
+**/uploads/
+**/public/uploads/
+**/tmp/
+**/temp/
+**/keys/
+
+# Test and coverage artifacts
+.nyc_output/
+coverage/
+
+# Optional: keep local app data out of Git
+*.sqlite
+*.db
+
+# Lockfiles are optional for this repo policy
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

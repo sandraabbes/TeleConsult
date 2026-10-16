@@ -39,10 +39,10 @@ export class JwtDoctorGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
 
-    // ✅ Extract token from cookie or Authorization header
+    // ✅ Extract token from Authorization header or cookie
     const token =
-      req.cookies?.accessToken ||
-      req.headers.authorization?.replace('Bearer ', '');
+      req.headers.authorization?.replace('Bearer ', '') ||
+      req.cookies?.accessToken;
 
     if (!token) {
       this.logger.warn('❌ Token missing from request');

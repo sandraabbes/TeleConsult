@@ -1,43 +1,46 @@
 {
   "name": "tem-ddc",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "Teleconsultation platform with a React frontend and NestJS microservices backend.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-
-
+    "test": "echo \"No root-level tests configured\" && exit 1",
     "start:gateway": "npm --prefix api-gateway run start:dev",
-
-  "start:ai": "npm --prefix ms-ai run start:dev",
-  "start:availability": "npm --prefix ms-availability run start:dev",
-  "start:disponibility": "npm --prefix ms-disponibility run start:dev",
-  "start:doctors": "npm --prefix ms-doctors run start:dev",
-
-  "start:logindoctor": "npm --prefix ms-logindoctor run start:dev",
-  "start:loginpatient": "npm --prefix ms-loginpatient run start:dev",
-
-  "start:medical": "npm --prefix ms-medical-records run start:dev",
-  "start:messages": "npm --prefix ms-messages run start:dev",
-  "start:notifications": "npm --prefix ms-notifications run start:dev",
-
-  "start:patients": "npm --prefix ms-patients run start:dev",
-  "start:payments": "npm --prefix ms-payments run start:dev",
-  "start:rendezvous": "npm --prefix ms-rendez-vous run start:dev",
-  "start:video": "npm --prefix ms-video-consultation run start:dev",
-
-  "start:all": "concurrently -n GATEWAY,AI,AVAIL,DISPO,DOCTORS,LOGINDOC,LOGINPAT,MEDICAL,MSG,NOTIF,PATIENTS,PAYMENTS,RENDEZVOUS,VIDEO -c blue,green,yellow,magenta,cyan,white,gray,red,blueBright,greenBright,yellowBright,magentaBright,cyanBright,whiteBright \"npm run start:gateway\" \"npm run start:ai\" \"npm run start:availability\" \"npm run start:disponibility\" \"npm run start:doctors\" \"npm run start:logindoctor\" \"npm run start:loginpatient\" \"npm run start:medical\" \"npm run start:messages\" \"npm run start:notifications\" \"npm run start:patients\" \"npm run start:payments\" \"npm run start:rendezvous\" \"npm run start:video\""
+    "start:ai": "npm --prefix ms-ai run start:dev",
+    "start:availability": "npm --prefix ms-availability run start:dev",
+    "start:disponibility": "npm --prefix ms-disponibility run start:dev",
+    "start:doctors": "npm --prefix ms-doctors run start:dev",
+    "start:logindoctor": "npm --prefix ms-logindoctor run start:dev",
+    "start:loginpatient": "npm --prefix ms-loginpatient run start:dev",
+    "start:medical": "npm --prefix ms-medical-records run start:dev",
+    "start:messages": "npm --prefix ms-messages run start:dev",
+    "start:notifications": "npm --prefix ms-notifications run start:dev",
+    "start:patients": "npm --prefix ms-patients run start:dev",
+    "start:payments": "npm --prefix ms-payments run start:dev",
+    "start:rendezvous": "npm --prefix ms-rendez-vous run start:dev",
+    "start:video": "npm --prefix ms-video-consultation run start:dev",
+    "start:all": "concurrently -n GATEWAY,AI,AVAIL,DISPO,DOCTORS,LOGINDOC,LOGINPAT,MEDICAL,MSG,NOTIF,PATIENTS,PAYMENTS,RENDEZVOUS,VIDEO -c blue,green,yellow,magenta,cyan,white,gray,red,blueBright,greenBright,yellowBright,magentaBright,cyanBright,whiteBright \"npm run start:gateway\" \"npm run start:ai\" \"npm run start:availability\" \"npm run start:disponibility\" \"npm run start:doctors\" \"npm run start:logindoctor\" \"npm run start:loginpatient\" \"npm run start:medical\" \"npm run start:messages\" \"npm run start:notifications\" \"npm run start:patients\" \"npm run start:payments\" \"npm run start:rendezvous\" \"npm run start:video\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Internship2026/TEM-DDC.git"
   },
-  "keywords": [],
+  "keywords": [
+    "teleconsultation",
+    "microservices",
+    "nestjs",
+    "react",
+    "healthcare"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Internship2026/TEM-DDC/issues"
   },
-  "homepage": "https://github.com/Internship2026/TEM-DDC#readme"
+  "homepage": "https://github.com/Internship2026/TEM-DDC#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
 }
