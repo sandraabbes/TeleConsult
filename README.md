@@ -1,6 +1,6 @@
-# Teleconsultation Platform
+# TeleConsult
 
-This repository contains a complete teleconsultation platform designed for digital healthcare services. The system combines a modern React frontend with a distributed NestJS microservices backend to support patient-doctor communication, appointment management, medical data handling, AI-powered support, and online consultation workflows.
+TeleConsult is a teleconsultation platform designed for digital healthcare services. The system combines a modern React frontend with a distributed NestJS microservices backend to support patient-doctor communication, appointment management, medical data handling, AI-powered support, and online consultation workflows.
 
 ## Overview
 
